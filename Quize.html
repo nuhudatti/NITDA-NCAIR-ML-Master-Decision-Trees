@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NITDA/NCAIR ML Mastery Portal – Decision Trees Quiz</title>
+  <meta name="description" content="NITDA/NCAIR ML Mastery Portal – Test your knowledge of Decision Trees with 80 expert-designed questions across fundamentals, implementation, advanced concepts, and applications. Build Nigeria's AI future through machine learning mastery.">
+  <meta name="keywords" content="NITDA, NCAIR, ML Mastery, Decision Trees, Machine Learning Nigeria, AI Education, Quiz, Fundamentals, Advanced Concepts, Applications, Data Science Nigeria, scikit-learn, Python ML">
+  <meta name="author" content="Nuhu Muhammad Datti">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="NITDA/NCAIR ML Mastery Portal – Decision Trees Quiz">
+  <meta property="og:description" content="Challenge yourself with 80 Decision Tree questions across all topics – from fundamentals to real-world applications.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nuhudatti.github.io/NITDA-NCAIR-ML-Master-Decision-Trees/">
+  <meta property="og:site_name" content="NITDA/NCAIR ML Mastery Portal">
+  <meta property="og:locale" content="en_NG">
+  <meta property="og:image" content="Quize.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NITDA/NCAIR ML Mastery Portal – Decision Trees Quiz">
+  <meta name="twitter:description" content="Test your Decision Tree skills with 80 comprehensive questions.">
+  <meta name="twitter:image" content="Quize.png">
+  <meta name="twitter:creator" content="@nuhudatti">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" href="https://nuhudatti.github.io/NITDA-NCAIR-ML-Master-Decision-Trees/assets/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --secondary: #3B82F6;
+            --accent: #F59E0B;
+            --dark: #1F2937;
+            --light: #F3F4F6;
+            --danger: #EF4444;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+            min-height: 100vh;
+        }
+        
+        .header-glow {
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-container:hover {
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+        }
+        
+        .option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #E5E7EB;
+        }
+        
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background-color: #ECFDF5;
+        }
+        
+        .option.correct {
+            border-color: var(--success);
+            background-color: #ECFDF5;
+        }
+        
+        .option.incorrect {
+            border-color: var(--danger);
+            background-color: #FEF2F2;
+        }
+        
+        .badge {
+            animation: popIn 0.6s ease-out;
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            pointer-events: none;
+            animation: confettiFall 5s ease-in-out forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .score-display {
+            transition: all 0.5s ease;
+            background: linear-gradient(135deg, #ECFDF5 0%, #EFF6FF 100%);
+            border-radius: 16px;
+        }
+        
+        .category-pill {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .category-pill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2563EB 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .score-counter {
+            font-variant-numeric: tabular-nums;
+            transition: all 0.5s ease;
+        }
+        
+        .tree-icon {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .leaderboard-item {
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            background-color: #F9FAFB;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .timer {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy {
+            background-color: #ECFDF5;
+            color: #065F46;
+        }
+        
+        .difficulty-medium {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .difficulty-hard {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .achievement-progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #E5E7EB;
+            overflow: hidden;
+        }
+        
+        .achievement-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+        }
+        
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+            stroke-linecap: round;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-600 to-green-800 text-white py-4 px-6 sticky top-0 z-50 header-glow">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="bg-white rounded-lg p-2 mr-3">
+                    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="#F59E0B"/>
+                        <path d="M10 10H30V30H10V10Z" fill="white"/>
+                        <path d="M15 15H25V25H15V15Z" fill="#10B981"/>
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold">NITDA/NCAIR ML Mastery Portal</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6">
+                    <li><a href="#" class="hover:text-green-200 transition"><i class="fas fa-home mr-1"></i> Home</a></li>
+                    <li><a href="#" class="hover:text-green-200 transition"><i class="fas fa-book mr-1"></i> Courses</a></li>
+                    <li><a href="#" class="hover:text-green-200 transition"><i class="fas fa-graduation-cap mr-1"></i> Learning Path</a></li>
+                    <li><a href="#" class="hover:text-green-200 transition"><i class="fas fa-download mr-1"></i> Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Hero Section -->
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4 typewriter">Decision Trees Mastery Quiz</h2>
+                <p class="text-gray-600 text-lg">Test your knowledge with our comprehensive quiz featuring 80 questions across all decision tree topics</p>
+                
+                <div class="mt-8 flex justify-center">
+                    <div class="floating-icon bg-white p-4 rounded-full shadow-lg">
+                        <i class="fas fa-tree text-green-500 text-3xl tree-icon"></i>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-3 gap-4 mt-8 max-w-md mx-auto">
+                    <div class="stats-card text-center">
+                        <div class="text-2xl font-bold text-green-600">80</div>
+                        <div class="text-sm text-gray-600">Questions</div>
+                    </div>
+                    <div class="stats-card text-center">
+                        <div class="text-2xl font-bold text-blue-600">4</div>
+                        <div class="text-sm text-gray-600">Categories</div>
+                    </div>
+                    <div class="stats-card text-center">
+                        <div class="text-2xl font-bold text-purple-600">5</div>
+                        <div class="text-sm text-gray-600">Achievements</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz Selection -->
+            <div id="quiz-selection" class="quiz-container p-8 mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Select Quiz Category</h3>
+                <p class="text-gray-600 mb-6">Choose a category to start testing your knowledge</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="category-pill bg-gradient-to-br from-green-50 to-green-100 text-center" data-category="all">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                            <i class="fas fa-tree text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">All Topics</h4>
+                        <p class="text-gray-600">80 questions</p>
+                        <div class="mt-4 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">
+                            Comprehensive
+                        </div>
+                    </div>
+                    
+                    <div class="category-pill bg-gradient-to-br from-blue-50 to-blue-100 text-center" data-category="fundamentals">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                            <i class="fas fa-shapes text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">Fundamentals</h4>
+                        <p class="text-gray-600">20 questions</p>
+                        <div class="mt-4 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">
+                            Beginner
+                        </div>
+                    </div>
+                    
+                    <div class="category-pill bg-gradient-to-br from-purple-50 to-purple-100 text-center" data-category="implementation">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                            <i class="fas fa-code text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">Implementation</h4>
+                        <p class="text-gray-600">20 questions</p>
+                        <div class="mt-4 bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">
+                            Intermediate
+                        </div>
+                    </div>
+                    
+                    <div class="category-pill bg-gradient-to-br from-yellow-50 to-yellow-100 text-center" data-category="advanced">
+                        <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                            <i class="fas fa-cogs text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">Advanced Concepts</h4>
+                        <p class="text-gray-600">20 questions</p>
+                        <div class="mt-4 bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">
+                            Advanced
+                        </div>
+                    </div>
+                    
+                    <div class="category-pill bg-gradient-to-br from-red-50 to-red-100 text-center" data-category="applications">
+                        <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                            <i class="fas fa-rocket text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">Applications</h4>
+                        <p class="text-gray-600">20 questions</p>
+                        <div class="mt-4 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">
+                            Expert
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button id="start-quiz" class="btn-primary">
+                        <i class="fas fa-play-circle mr-2"></i> Start Quiz
+                    </button>
+                    <button id="view-leaderboard" class="btn-secondary ml-4">
+                        <i class="fas fa-trophy mr-2"></i> View Leaderboard
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Leaderboard -->
+            <div id="leaderboard" class="quiz-container hidden p-8 mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Quiz Leaderboard</h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Leaderboard items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button id="back-to-selection-from-leaderboard" class="btn-primary">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Selection
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quiz Interface -->
+            <div id="quiz-interface" class="quiz-container hidden">
+                <!-- Progress Bar -->
+                <div class="bg-gray-200 h-2">
+                    <div id="quiz-progress" class="progress-bar bg-green-600 h-2 w-0"></div>
+                </div>
+                
+                <!-- Quiz Header -->
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <div>
+                        <h3 id="quiz-category" class="text-lg font-bold text-gray-800">Decision Trees Fundamentals</h3>
+                        <p id="quiz-progress-text" class="text-sm text-gray-600">Question <span class="question-counter">1</span> of <span id="total-questions">80</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600">Score: <span id="quiz-score" class="font-bold score-counter">0</span>%</p>
+                        <p id="quiz-accuracy" class="text-xs text-gray-500">Accuracy: 0%</p>
+                        <p class="text-xs text-gray-500 mt-1">Time: <span id="quiz-timer" class="timer">00:00</span></p>
+                    </div>
+                </div>
+                
+                <!-- Question Card -->
+                <div class="p-6">
+                    <div id="question-container" class="question-card mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-xl font-bold text-gray-800" id="question-text">What is a Decision Tree?</h4>
+                            <span id="difficulty-badge" class="difficulty-badge difficulty-easy">Easy</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="options-container">
+                            <!-- Options will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Feedback Section -->
+                    <div id="feedback-container" class="hidden p-4 rounded-lg mb-6">
+                        <div id="correct-feedback" class="hidden bg-green-50 text-green-800 p-4 rounded-lg border border-green-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-2"></i>
+                                <p class="font-bold">Correct!</p>
+                            </div>
+                            <p class="mt-2" id="correct-explanation">Yes, a Decision Tree is a tree-like model used for both classification and regression tasks.</p>
+                        </div>
+                        <div id="incorrect-feedback" class="hidden bg-red-50 text-red-800 p-4 rounded-lg border border-red-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-times-circle text-red-500 text-xl mr-2"></i>
+                                <p class="font-bold">Incorrect</p>
+                            </div>
+                            <p class="mt-2">The correct answer is <span id="correct-answer-text" class="font-bold">A tree-like model used for both classification and regression</span>. <span id="incorrect-explanation">Decision Trees mimic human decision-making by splitting data based on feature values.</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                   <!-- Navigation Buttons -->
+<div class="flex justify-between">
+    <div>
+        <button id="back-to-selection-from-quiz" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition mr-2">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Selection
+        </button>
+        <button id="prev-question" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition">
+            <i class="fas fa-arrow-left mr-2"></i> Previous
+        </button>
+    </div>
+    <div>
+        <button id="mark-review" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition mr-2">
+            <i class="fas fa-flag mr-2"></i> Mark for Review
+        </button>
+        <button id="next-question" class="btn-primary">
+            Next Question <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+</div>
+                </div>
+            </div>
+            
+            <!-- Results Screen -->
+            <div id="results-screen" class="quiz-container hidden p-8 text-center">
+                <div class="mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white mx-auto mb-4 pulse">
+                        <i class="fas fa-trophy text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Quiz Completed!</h3>
+                    <p class="text-gray-600">You've completed the Decision Trees Mastery Quiz</p>
+                </div>
+                
+                <div class="score-display p-6 rounded-lg mb-6">
+                    <div class="flex justify-center items-center mb-4">
+                        <div class="relative w-32 h-32 mr-6">
+                            <svg class="w-full h-full" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+                                <circle id="score-circle" cx="50" cy="50" r="45" fill="none" stroke="#10B981" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="283" transform="rotate(-90 50 50)"/>
+                                <text x="50" y="50" text-anchor="middle" dy="7" font-size="20" font-weight="bold" fill="#1F2937">
+                                    <tspan id="final-score">0</tspan>%
+                                </text>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-600">Correct</p>
+                                    <p class="text-2xl font-bold text-green-600 score-counter" id="correct-answers">0</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Incorrect</p>
+                                    <p class="text-2xl font-bold text-red-600 score-counter" id="incorrect-answers">0</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Skipped</p>
+                                    <p class="text-2xl font-bold text-yellow-600 score-counter" id="skipped-questions">0</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Time</p>
+                                    <p class="text-2xl font-bold text-blue-600 score-counter" id="time-taken">00:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h4 class="text-lg font-bold text-gray-800 mb-4">Achievement Badges</h4>
+                    <div class="flex flex-wrap justify-center gap-4" id="badges-container">
+                        <!-- Badges will be added here -->
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button id="review-quiz" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition">
+                        <i class="fas fa-redo mr-2"></i> Review Quiz
+                    </button>
+                    <button id="new-quiz" class="btn-primary">
+                        <i class="fas fa-plus mr-2"></i> New Quiz
+                    </button>
+                    <button id="share-results" class="btn-secondary">
+                        <i class="fas fa-share-alt mr-2"></i> Share Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">NITDA/NCAIR ML Mastery Portal</h3>
+                    <p class="text-gray-400">A revolutionary educational platform for building Nigeria's AI capabilities through comprehensive machine learning education.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Courses</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Learning Path</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Abuja, Nigeria</p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-envelope mr-2"></i> nuhumuammaddatti@gmail.com</p>
+                    <p class="text-gray-400"><i class="fas fa-phone mr-2"></i> +234 808 844 0095</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 NITDA/NCAIR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Back to selection from quiz button
+const backToSelectionFromQuiz = document.getElementById('back-to-selection-from-quiz');
+backToSelectionFromQuiz.addEventListener('click', () => {
+    // Confirm with user if they want to leave (optional)
+    if (userAnswers.filter(a => a !== null).length > 0) {
+        const confirmLeave = confirm('Are you sure you want to leave? Your progress will be lost.');
+        if (!confirmLeave) return;
+    }
+    
+    // Stop the timer
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    // Reset quiz state
+    currentQuestions = [];
+    currentQuestionIndex = 0;
+    userAnswers = [];
+    markedForReview = [];
+    quizStarted = false;
+    timeElapsed = 0;
+    
+    // Update UI
+    quizInterface.classList.add('hidden');
+    quizSelection.classList.remove('hidden');
+    
+    // Reset category selection
+    selectedCategory = '';
+    categoryPills.forEach(p => p.classList.remove('ring-2', 'ring-green-500'));
+});
+    </script>
+
+    <script>
+        // Quiz data with 80 questions (20 per category)
+const quizData = [
+    {
+        id: 1,
+        category: 'fundamentals',
+        question: 'What are the terminal nodes that provide final predictions called?',
+        options: [
+            'Branch Nodes',
+            'Leaf Nodes',
+            'Decision Nodes', 
+            'Root Nodes'
+        ],
+        answer: 1,
+        explanation: 'Leaf Nodes are the terminal nodes that provide the final output/prediction. Unlike decision nodes that split the data, leaf nodes represent the endpoint of a decision path and contain the predicted class label or value.',
+        difficulty: 'easy'
+    },
+    {
+        id: 2,
+        category: 'fundamentals',
+        question: 'What is the process of removing unnecessary branches called?',
+        options: [
+            'Pruning',
+            'Cutting',
+            'Reducing',
+            'Trimming'
+        ],
+        answer: 0,
+        explanation: 'Pruning involves removing unnecessary branches to prevent overfitting. This technique simplifies the tree by eliminating branches that have little statistical significance, which helps the model generalize better to new, unseen data rather than memorizing noise in the training data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 3,
+        category: 'fundamentals',
+        question: 'What real-world analogy is used to explain decision trees?',
+        options: [
+            'A organizational chart',
+            'A food chain',
+            'A flowchart for decision-making',
+            'A family tree'
+        ],
+        answer: 2,
+        explanation: 'Decision trees are compared to flowcharts that help make decisions, like deciding whether to play outside based on weather conditions. This analogy helps explain how decision trees work by breaking down complex decisions into a series of simple, sequential choices, much like a flowchart guides you through a decision process.',
+        difficulty: 'easy'
+    },
+    {
+        id: 4,
+        category: 'fundamentals',
+        question: 'What does a decision tree mimic in its functioning?',
+        options: [
+            'Biological processes',
+            'Human decision-making',
+            'Computer programming',
+            'Mathematical equations'
+        ],
+        answer: 1,
+        explanation: 'Decision trees mimic human decision-making by splitting data based on feature values. They replicate how humans naturally make decisions by asking a series of questions to arrive at a conclusion, making them intuitive and easy to interpret compared to other machine learning algorithms.',
+        difficulty: 'easy'
+    },
+    {
+        id: 5,
+        category: 'fundamentals',
+        question: 'What is the starting point of a decision tree called?',
+        options: [
+            'Branch',
+            'Root Node',
+            'Decision Node',
+            'Leaf Node'
+        ],
+        answer: 1,
+        explanation: 'The Root Node is the starting point representing the entire dataset in a decision tree. It contains all the training data and represents the first decision or split that will partition the data based on the most significant feature.',
+        difficulty: 'easy'
+    },
+    {
+        id: 6,
+        category: 'fundamentals',
+        question: 'What are the intermediate nodes that split the data called?',
+        options: [
+            'End Nodes',
+            'Leaf Nodes',
+            'Root Nodes',
+            'Decision Nodes'
+        ],
+        answer: 3,
+        explanation: 'Decision Nodes are intermediate nodes that split the data based on conditions. These nodes represent questions or tests on specific features and divide the data into subsets, moving further down the tree until a prediction can be made at the leaf nodes.',
+        difficulty: 'easy'
+    },
+    {
+        id: 7,
+        category: 'fundamentals',
+        question: 'In the play outside example, what condition leads to staying inside?',
+        options: [
+            'Only if it is raining',
+            'If it is windy',
+            'If it is raining OR temperature is above 30°C',
+            'Only if temperature is above 30°C'
+        ],
+        answer: 2,
+        explanation: 'In the example, you stay inside if it is raining OR if the temperature is above 30°C. This demonstrates how decision trees can handle multiple conditions that lead to the same outcome, using logical OR relationships in their decision paths.',
+        difficulty: 'medium'
+    },
+    {
+        id: 8,
+        category: 'fundamentals',
+        question: 'What represents the connections between nodes in a decision tree?',
+        options: [
+            'Edges',
+            'Paths',
+            'Branches',
+            'Links'
+        ],
+        answer: 2,
+        explanation: 'Branches are the connections between nodes representing decision outcomes. Each branch corresponds to the result of a test at a decision node and leads to the next node in the tree, forming the structure that guides the flow of decision-making.',
+        difficulty: 'easy'
+    },
+    {
+        id: 9,
+        category: 'fundamentals',
+        question: 'What problem does pruning help to prevent?',
+        options: [
+            'Data leakage',
+            'Underfitting',
+            'Overfitting',
+            'Feature bias'
+        ],
+        answer: 2,
+        explanation: 'Pruning helps prevent overfitting by removing unnecessary branches that may have learned noise in the training data. Overfitting occurs when a model becomes too complex and captures random fluctuations in the training data rather than the underlying pattern, reducing its ability to generalize to new data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 10,
+        category: 'fundamentals',
+        question: 'What is the visual structure of a decision tree similar to?',
+        options: [
+            'A matrix',
+            'An inverted tree with root at top',
+            'A normal tree with root at bottom',
+            'A network graph'
+        ],
+        answer: 1,
+        explanation: 'Decision trees are typically visualized as inverted trees with the root node at the top and branches extending downward. This visualization convention makes it easy to follow the decision path from the general question at the root to the specific predictions at the leaves.',
+        difficulty: 'easy'
+    },
+    {
+        id: 11,
+        category: 'fundamentals',
+        question: 'How does a decision tree split data?',
+        options: [
+            'Based on the order of features in the dataset',
+            'Using predefined rules only',
+            'Randomly to ensure diversity',
+            'Based on feature values that create the purest subsets'
+        ],
+        answer: 3,
+        explanation: 'Decision trees split data based on feature values that create subsets with the highest purity (most homogeneous). The algorithm evaluates different splitting criteria (like Gini impurity or information gain) to find the feature and threshold that best separates the data into distinct classes or values.',
+        difficulty: 'medium'
+    },
+    {
+        id: 12,
+        category: 'fundamentals',
+        question: 'What is the goal of creating subsets in decision trees?',
+        options: [
+            'To minimize the number of splits',
+            'To use all available features equally',
+            'To create subsets that are as pure as possible',
+            'To create subsets of equal size'
+        ],
+        answer: 2,
+        explanation: 'The goal is to create subsets that are as pure as possible (containing mostly one class). Purity measures how homogeneous the samples in a node are with respect to the target variable, and maximizing purity at each split leads to more accurate and interpretable decision boundaries.',
+        difficulty: 'medium'
+    },
+    {
+        id: 13,
+        category: 'fundamentals',
+        question: 'What does each internal node in a tree represent?',
+        options: [
+            'A decision based on a feature',
+            'The starting point of the tree',
+            'A data preprocessing step',
+            'The final prediction'
+        ],
+        answer: 0,
+        explanation: 'Each internal (decision) node represents a decision based on a feature value that splits the data. These nodes contain the conditions or questions that route data points down different paths in the tree based on their feature values.',
+        difficulty: 'easy'
+    },
+    {
+        id: 14,
+        category: 'fundamentals',
+        question: 'What is the hierarchical nature of decision trees?',
+        options: [
+            'Decisions are made from leaves to root',
+            'Decisions are made sequentially from root to leaves',
+            'All decisions are made simultaneously',
+            'Decisions are made randomly'
+        ],
+        answer: 1,
+        explanation: 'Decision trees make decisions sequentially, starting from the root node and moving down through decision nodes until reaching a leaf node. This hierarchical structure allows complex decisions to be broken down into simpler, sequential questions that are easier to interpret and understand.',
+        difficulty: 'easy'
+    },
+    {
+        id: 15,
+        category: 'fundamentals',
+        question: 'What is a Decision Tree?',
+        options: [
+            'A type of neural network',
+            'A clustering algorithm',
+            'A tree-like model used for both classification and regression',
+            'A dimensionality reduction technique'
+        ],
+        answer: 2,
+        explanation: 'A Decision Tree is a tree-like model used for both classification (predicting categories) and regression (predicting continuous values). It works by recursively partitioning the feature space into regions, with each region corresponding to a prediction, making it a versatile algorithm for various prediction tasks.',
+        difficulty: 'easy'
+    },
+    {
+        id: 16,
+        category: 'fundamentals',
+        question: 'What are the two main types of problems that decision trees can solve?',
+        options: [
+            'Linear and Non-linear Problems',
+            'Classification and Regression',
+            'Supervised and Unsupervised Learning',
+            'Clustering and Dimensionality Reduction'
+        ],
+        answer: 1,
+        explanation: 'Decision trees can solve both classification (categorical outcomes) and regression (continuous outcomes) problems. Classification trees predict class labels, while regression trees predict continuous values, making decision trees applicable to a wide range of predictive modeling tasks.',
+        difficulty: 'easy'
+    },
+    {
+        id: 17,
+        category: 'fundamentals',
+        question: 'In the weather example, what question is asked at the root node?',
+        options: [
+            'Is the temperature above 30°C?',
+            'What is the humidity level?',
+            'Is it windy?',
+            'Is it raining?'
+        ],
+        answer: 3,
+        explanation: 'In the decision tree example for playing outside, the first question asked is "Is it raining?" This demonstrates how decision trees prioritize the most significant feature at the root node, which has the greatest impact on the final decision.',
+        difficulty: 'easy'
+    },
+    {
+        id: 18,
+        category: 'fundamentals',
+        question: 'How does a decision tree handle decision-making?',
+        options: [
+            'By averaging similar data points',
+            'By recursively splitting data based on feature values',
+            'By memorizing all training examples',
+            'By using complex mathematical formulas'
+        ],
+        answer: 1,
+        explanation: 'Decision trees work by recursively splitting the data into subsets based on the value of input features. This recursive partitioning continues until the subsets are sufficiently pure or a stopping criterion is met, creating a hierarchical decision structure.',
+        difficulty: 'medium'
+    },
+    {
+        id: 19,
+        category: 'fundamentals',
+        question: 'What is the main advantage of decision trees interpretability?',
+        options: [
+            'Works with any type of data without preprocessing',
+            'Easy to understand and explain (white box model)',
+            'Highest accuracy among all algorithms',
+            'Fastest training time'
+        ],
+        answer: 1,
+        explanation: 'Decision trees are easy to understand and interpret, making them a "white box" model where the decision process is transparent. Unlike black box models like neural networks, decision trees provide clear reasoning for their predictions, which is valuable in domains where explainability is important.',
+        difficulty: 'easy'
+    },
+    {
+        id: 20,
+        category: 'fundamentals',
+        question: 'What type of model is a decision tree considered?',
+        options: [
+            'Transparent box model',
+            'Gray box model',
+            'White box model',
+            'Black box model'
+        ],
+        answer: 2,
+        explanation: 'Decision trees are considered white box models because their decision-making process is transparent and easy to interpret. The entire logic of the model can be visualized and understood by examining the tree structure, unlike black box models where the reasoning is opaque.',
+        difficulty: 'easy'
+    },
+    {
+        id: 21,
+        category: 'implementation',
+        question: 'What method is used to make predictions with a trained decision tree?',
+        options: [
+            'classify()',
+            'decide()',
+            'predict()',
+            'evaluate()'
+        ],
+        answer: 2,
+        explanation: 'The predict() method is used to make predictions on new data using the trained model. In scikit-learn, after training a decision tree with the fit() method, you use predict() for classification tasks or predict_proba() to get probability estimates for each class.',
+        difficulty: 'easy'
+    },
+    {
+        id: 22,
+        category: 'implementation',
+        question: 'How is accuracy typically calculated for a classification model?',
+        options: [
+            'Number of incorrect predictions / Total predictions',
+            'F1 score * 2',
+            'Number of correct predictions / Total predictions',
+            'Precision + Recall'
+        ],
+        answer: 2,
+        explanation: 'Accuracy is calculated as the ratio of correct predictions to total predictions made. It provides a simple measure of overall model performance but can be misleading with imbalanced datasets, where other metrics like precision, recall, or F1-score might be more informative.',
+        difficulty: 'easy'
+    },
+    {
+        id: 23,
+        category: 'implementation',
+        question: 'Which library is commonly used for visualizing decision trees in Python?',
+        options: [
+            'Bokeh',
+            'Seaborn',
+            'Matplotlib with scikit-learn plot_tree',
+            'Plotly'
+        ],
+        answer: 2,
+        explanation: 'Matplotlib combined with scikit-learn plot_tree function is commonly used for decision tree visualization. This integration provides a straightforward way to visualize the tree structure, including decision rules, impurity measures, and sample counts at each node.',
+        difficulty: 'medium'
+    },
+    {
+        id: 24,
+        category: 'implementation',
+        question: 'What function from scikit-learn is used to plot decision trees?',
+        options: [
+            'show_tree()',
+            'plot_tree()',
+            'visualize_tree()',
+            'draw_tree()'
+        ],
+        answer: 1,
+        explanation: 'The plot_tree() function from scikit-learn.tree is used to visualize decision trees. It provides various parameters to customize the visualization, such as feature names, class labels, and node formatting options to enhance interpretability.',
+        difficulty: 'medium'
+    },
+    {
+        id: 25,
+        category: 'implementation',
+        question: 'What does the filled=True parameter do in plot_tree?',
+        options: [
+            'Fills the tree with sample data',
+            'Makes the nodes opaque',
+            'Colors nodes by their majority class',
+            'Adds background color to the plot'
+        ],
+        answer: 2,
+        explanation: 'filled=True colors the nodes based on the majority class, making the tree easier to interpret. The color intensity often represents the purity of the node, with darker shades indicating higher concentration of a particular class, providing visual cues about node homogeneity.',
+        difficulty: 'medium'
+    },
+    {
+        id: 26,
+        category: 'implementation',
+        question: 'How are feature names displayed in the decision tree visualization?',
+        options: [
+            'They are not displayed',
+            'Using the feature_names parameter',
+            'Automatically from the dataset',
+            'Using the column names from DataFrame'
+        ],
+        answer: 1,
+        explanation: 'The feature_names parameter is used to display actual feature names instead of indices in the visualization. This makes the tree more interpretable by showing meaningful feature names rather than generic indices, especially when working with datasets that have descriptive column names.',
+        difficulty: 'medium'
+    },
+    {
+        id: 27,
+        category: 'implementation',
+        question: 'What information does each node show in the decision tree visualization?',
+        options: [
+            'Only the class prediction',
+            'Splitting condition, gini impurity, samples count, and class distribution',
+            'Only the gini impurity',
+            'Only the splitting condition'
+        ],
+        answer: 1,
+        explanation: 'Each node typically shows the splitting condition, gini impurity, number of samples, and class distribution. This comprehensive information helps users understand not just the decision rule but also the quality of the split and the composition of data at each node.',
+        difficulty: 'medium'
+    },
+    {
+        id: 28,
+        category: 'implementation',
+        question: 'What is the typical accuracy range when using decision trees on the Iris dataset?',
+        options: [
+            'Around 70-75%',
+            'Around 90-95%',
+            'Around 50-60%',
+            'Around 99-100%'
+        ],
+        answer: 1,
+        explanation: 'Decision trees typically achieve around 90-95% accuracy on the Iris dataset with proper parameter tuning. The Iris dataset is well-suited for decision trees as it has clear decision boundaries between classes, allowing the algorithm to achieve high performance with relatively simple trees.',
+        difficulty: 'hard'
+    },
+    {
+        id: 29,
+        category: 'implementation',
+        question: 'How many classes are in the Iris dataset?',
+        options: [
+            '4',
+            '3',
+            '5',
+            '2'
+        ],
+        answer: 1,
+        explanation: 'The Iris dataset has 3 classes: setosa, versicolor, and virginica. This classic dataset contains measurements of 150 iris flowers from three different species, making it a standard benchmark for classification algorithms.',
+        difficulty: 'easy'
+    },
+    {
+        id: 30,
+        category: 'implementation',
+        question: 'What are the four features in the Iris dataset?',
+        options: [
+            'Sepal size, petal size, color, width',
+            'Length, width, color, texture',
+            'Sepal length, sepal width, petal length, petal width',
+            'Sepal length, sepal width, petal color, petal width'
+        ],
+        answer: 2,
+        explanation: 'The Iris dataset contains measurements of sepal length, sepal width, petal length, and petal width. These four continuous features measured in centimeters provide the input variables for predicting the iris species, with petal measurements often being more discriminative than sepal measurements.',
+        difficulty: 'easy'
+    },
+    {
+        id: 31,
+        category: 'implementation',
+        question: 'Which Python library is commonly used for implementing decision trees?',
+        options: [
+            'Keras',
+            'Scikit-learn',
+            'TensorFlow',
+            'PyTorch'
+        ],
+        answer: 1,
+        explanation: 'Scikit-learn is a popular Python library that provides a simple and efficient implementation of decision trees. It offers the DecisionTreeClassifier for classification tasks and DecisionTreeRegressor for regression tasks, along with comprehensive parameter tuning options and visualization tools.',
+        difficulty: 'easy'
+    },
+    {
+        id: 32,
+        category: 'implementation',
+        question: 'What function is used to load the Iris dataset in scikit-learn?',
+        options: [
+            'load_iris_dataset()',
+            'get_iris_data()',
+            'datasets.load_iris()',
+            'iris.load_data()'
+        ],
+        answer: 2,
+        explanation: 'The datasets.load_iris() function is used to load the famous Iris dataset in scikit-learn. This function returns a Bunch object containing the feature matrix (data), target vector (target), feature names, target names, and a description of the dataset.',
+        difficulty: 'easy'
+    },
+    {
+        id: 33,
+        category: 'implementation',
+        question: 'What are the two main components returned when loading the Iris dataset?',
+        options: [
+            'Features and labels',
+            'Feature matrix (X) and target vector (y)',
+            'Training data and test data',
+            'Inputs and outputs'
+        ],
+        answer: 1,
+        explanation: 'The dataset returns X (feature matrix) and y (target vector) containing the features and labels respectively. The feature matrix has shape (n_samples, n_features) and the target vector has shape (n_samples,), following the scikit-learn convention for supervised learning datasets.',
+        difficulty: 'medium'
+    },
+    {
+        id: 34,
+        category: 'implementation',
+        question: 'What is the purpose of train_test_split function?',
+        options: [
+            'To shuffle the dataset',
+            'To split data into training and testing sets',
+            'To normalize the data',
+            'To split features from targets'
+        ],
+        answer: 1,
+        explanation: 'train_test_split is used to split the dataset into training and testing subsets for model evaluation. This function randomly partitions the data, typically using 70-80% for training and 20-30% for testing, allowing you to assess model performance on unseen data.',
+        difficulty: 'easy'
+    },
+    {
+        id: 35,
+        category: 'implementation',
+        question: 'What does test_size=0.2 parameter mean in train_test_split?',
+        options: [
+            '20% of data used for testing, 80% for training',
+            '20 samples used for testing',
+            '20 features used for testing',
+            '20% of data used for training, 80% for testing'
+        ],
+        answer: 0,
+        explanation: 'test_size=0.2 means 20% of the data will be used for testing and the remaining 80% for training. This is a common split ratio that provides sufficient data for both training a robust model and evaluating its performance on held-out data.',
+        difficulty: 'easy'
+    },
+    {
+        id: 36,
+        category: 'implementation',
+        question: 'What class is used to create a decision tree classifier in scikit-learn?',
+        options: [
+            'TreeClassifier',
+            'DecisionTree',
+            'DecisionTreeClassifier',
+            'TreeModel'
+        ],
+        answer: 2,
+        explanation: 'DecisionTreeClassifier is the class used to create decision tree classifiers in scikit-learn. It provides numerous parameters to control tree growth, including criteria for splitting, maximum depth, minimum samples per leaf, and pruning options to optimize model performance.',
+        difficulty: 'easy'
+    },
+    {
+        id: 37,
+        category: 'implementation',
+        question: 'What parameter controls the splitting criterion in DecisionTreeClassifier?',
+        options: [
+            'split_criterion',
+            'method',
+            'criterion',
+            'splitter'
+        ],
+        answer: 2,
+        explanation: 'The criterion parameter controls the function to measure the quality of a split (e.g., "gini" or "entropy"). Gini impurity is faster to compute, while information gain (entropy) might produce slightly different trees; both generally yield similar results in practice.',
+        difficulty: 'medium'
+    },
+    {
+        id: 38,
+        category: 'implementation',
+        question: 'What does the max_depth parameter control?',
+        options: [
+            'The maximum number of features',
+            'The maximum depth of the tree',
+            'The minimum depth of the tree',
+            'The maximum number of samples'
+        ],
+        answer: 1,
+        explanation: 'max_depth limits how deep the tree can grow, helping to prevent overfitting. By restricting tree depth, you control model complexity and reduce the risk of capturing noise in the training data, leading to better generalization on unseen data.',
+        difficulty: 'easy'
+    },
+    {
+        id: 39,
+        category: 'implementation',
+        question: 'Why is the random_state parameter important?',
+        options: [
+            'It reduces memory usage',
+            'It ensures reproducible results',
+            'It makes the algorithm faster',
+            'It improves accuracy'
+        ],
+        answer: 1,
+        explanation: 'random_state ensures that the results are reproducible by fixing the random number generator seed. This is important for experimentation and comparison, as decision trees involve random elements in some implementations (like selecting features when max_features < total features).',
+        difficulty: 'medium'
+    },
+    {
+        id: 40,
+        category: 'implementation',
+        question: 'What method is used to train the decision tree classifier?',
+        options: [
+            'train()',
+            'learn()',
+            'fit()',
+            'build()'
+        ],
+        answer: 2,
+        explanation: 'The fit() method is used to train the decision tree model on the training data. This method implements the recursive partitioning algorithm to build the tree structure based on the provided training data and specified parameters.',
+        difficulty: 'easy'
+    },
+    {
+        id: 41,
+        category: 'advanced',
+        question: 'What is overfitting in decision trees?',
+        options: [
+            'When the model training takes too long',
+            'When the model learns training data too well, including noise',
+            'When the model uses too many features',
+            'When the model is too simple to capture patterns'
+        ],
+        answer: 1,
+        explanation: 'Overfitting occurs when the tree becomes too complex and memorizes the training data, including its noise and outliers. An overfitted tree performs exceptionally well on training data but poorly on new, unseen data because it has learned idiosyncrasies specific to the training set rather than general patterns.',
+        difficulty: 'medium'
+    },
+    {
+        id: 42,
+        category: 'advanced',
+        question: 'What are the symptoms of overfitting?',
+        options: [
+            'Low training accuracy but high test accuracy',
+            'High training accuracy but low test accuracy',
+            'Low training accuracy and low test accuracy',
+            'High training accuracy and high test accuracy'
+        ],
+        answer: 1,
+        explanation: 'Overfitting is characterized by excellent performance on training data but poor performance on unseen test data. This performance gap indicates that the model has memorized the training examples rather than learning generalizable patterns that apply to new data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 43,
+        category: 'advanced',
+        question: 'What is underfitting in decision trees?',
+        options: [
+            'When the model uses the wrong features',
+            'When the model has too many parameters',
+            'When the model is too simple to capture patterns in the data',
+            'When the model is too complex'
+        ],
+        answer: 2,
+        explanation: 'Underfitting occurs when the tree is too simple and fails to capture important patterns and relationships in the data. An underfitted tree is typically too shallow or has too few splits, resulting in poor performance on both training and test data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 44,
+        category: 'advanced',
+        question: 'What are the symptoms of underfitting?',
+        options: [
+            'Good performance on training but poor on test',
+            'Poor performance on both training and test data',
+            'Good performance on both training and test',
+            'Poor performance on training but good on test'
+        ],
+        answer: 1,
+        explanation: 'Underfitting results in poor performance on both training and test data because the model is too simplistic. The tree lacks the complexity needed to capture the underlying patterns in the data, leading to high bias and insufficient model capacity.',
+        difficulty: 'medium'
+    },
+    {
+        id: 45,
+        category: 'advanced',
+        question: 'What is pruning in decision trees?',
+        options: [
+            'Combining multiple trees together',
+            'Changing the tree structure for better visualization',
+            'Removing unnecessary branches to simplify the tree',
+            'Adding more branches to increase accuracy'
+        ],
+        answer: 2,
+        explanation: 'Pruning involves removing branches that have little importance to the final prediction, simplifying the tree. This technique helps prevent overfitting by eliminating splits that don\'t significantly improve predictive accuracy, resulting in a more generalizable model with better performance on unseen data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 46,
+        category: 'advanced',
+        question: 'What does the min_samples_split parameter control?',
+        options: [
+            'Maximum samples allowed in a node',
+            'Minimum samples required at a leaf node',
+            'Minimum samples required to split an internal node',
+            'Minimum samples for the root node'
+        ],
+        answer: 2,
+        explanation: 'min_samples_split specifies the minimum number of samples required to split an internal node. Higher values prevent the tree from creating splits based on very small subsets of data, which are more likely to represent noise rather than meaningful patterns.',
+        difficulty: 'medium'
+    },
+    {
+        id: 47,
+        category: 'advanced',
+        question: 'What does the min_samples_leaf parameter control?',
+        options: [
+            'Minimum samples required to split a node',
+            'Minimum samples required at a leaf node',
+            'Maximum samples allowed in a leaf',
+            'Minimum samples for the root node'
+        ],
+        answer: 1,
+        explanation: 'min_samples_leaf specifies the minimum number of samples that must be present at a leaf node. This parameter ensures that each leaf has sufficient samples to make reliable predictions, preventing the tree from creating leaves with very few samples that might overfit to noise.',
+        difficulty: 'medium'
+    },
+    {
+        id: 48,
+        category: 'advanced',
+        question: 'What does the max_features parameter control?',
+        options: [
+            'The most important features to use',
+            'Number of features to consider when looking for the best split',
+            'Minimum number of features required',
+            'Maximum number of features in the dataset'
+        ],
+        answer: 1,
+        explanation: 'max_features limits the number of features considered for the best split at each node. This parameter introduces randomness into the tree building process and can help create more diverse trees when using ensemble methods like Random Forests.',
+        difficulty: 'medium'
+    },
+    {
+        id: 49,
+        category: 'advanced',
+        question: 'What is the purpose of ccp_alpha parameter?',
+        options: [
+            'Parameter to set the confidence level',
+            'Complexity parameter used for minimal cost-complexity pruning',
+            'Parameter to control the learning rate',
+            'Parameter to adjust the splitting criterion'
+        ],
+        answer: 1,
+        explanation: 'ccp_alpha is used for minimal cost-complexity pruning, which helps find an optimal tree size. This technique balances tree complexity against performance, automatically determining the right amount of pruning to apply for optimal generalization.',
+        difficulty: 'hard'
+    },
+    {
+        id: 50,
+        category: 'advanced',
+        question: 'What are typical values for max_depth in decision trees?',
+        options: [
+            '20 to 30',
+            '3 to 10',
+            '50 to 100',
+            '1 to 2'
+        ],
+        answer: 1,
+        explanation: 'Typical max_depth values range from 3 to 10, balancing model complexity and performance. Shallower trees (3-5) are often sufficient for simple datasets, while deeper trees (8-10) might be needed for more complex relationships, though they increase the risk of overfitting.',
+        difficulty: 'medium'
+    },
+    {
+        id: 51,
+        category: 'advanced',
+        question: 'How do decision trees handle numerical features?',
+        options: [
+            'By using them as-is without splits',
+            'By creating splits based on thresholds',
+            'By normalizing them first',
+            'By converting them to categorical'
+        ],
+        answer: 1,
+        explanation: 'For numerical features, decision trees create splits based on thresholds (e.g., petal width ≤ 2.45 cm). The algorithm evaluates all possible threshold values to find the one that best separates the data, making decision trees naturally capable of handling continuous variables without requiring preprocessing like normalization.',
+        difficulty: 'medium'
+    },
+    {
+        id: 52,
+        category: 'advanced',
+        question: 'How do decision trees handle categorical features?',
+        options: [
+            'By ignoring them',
+            'By creating splits based on category membership',
+            'By using one-hot encoding automatically',
+            'By converting them to numerical values'
+        ],
+        answer: 1,
+        explanation: 'For categorical features, trees create splits based on category membership (e.g., outlook in {sunny, overcast}). The algorithm evaluates different subsets of categories to find the grouping that best separates the target variable, efficiently handling multi-class categorical variables without requiring one-hot encoding in many implementations.',
+        difficulty: 'medium'
+    },
+    {
+        id: 53,
+        category: 'advanced',
+        question: 'What are the advantages of decision trees?',
+        options: [
+            'No hyperparameters to tune, always converges',
+            'Easy to understand, handle mixed data types, require little preprocessing',
+            'Best for large datasets, handles missing values automatically',
+            'Highest accuracy, fastest training, works with any data'
+        ],
+        answer: 1,
+        explanation: 'Key advantages include interpretability, ability to handle both numerical and categorical data, and minimal data preprocessing requirements. Decision trees can model non-linear relationships, handle missing values through surrogate splits, and provide feature importance scores, making them versatile and user-friendly for both beginners and experts.',
+        difficulty: 'easy'
+    },
+    {
+        id: 54,
+        category: 'advanced',
+        question: 'What are the limitations of decision trees?',
+        options: [
+            'Only work with numerical data, sensitive to outliers, limited to binary classification',
+            'Prone to overfitting, unstable with small data changes, biased toward features with more levels',
+            'Too simple, cannot handle non-linear relationships, slow training',
+            'Require extensive preprocessing, difficult to interpret, high computational cost'
+        ],
+        answer: 1,
+        explanation: 'Main limitations include overfitting tendency, instability, and bias toward features with more categories. Decision trees can be sensitive to small variations in training data (high variance), may create over-complex trees that don\'t generalize well, and tend to favor features with more levels or categories, which can lead to suboptimal feature selection.',
+        difficulty: 'medium'
+    },
+    {
+        id: 55,
+        category: 'advanced',
+        question: 'What hyperparameter would you adjust to prevent a tree from growing too deep?',
+        options: [
+            'ccp_alpha',
+            'max_features',
+            'max_depth',
+            'min_samples_leaf'
+        ],
+        answer: 2,
+        explanation: 'max_depth directly controls how deep the tree can grow, preventing excessive complexity. By limiting the maximum depth, you constrain the number of sequential decisions the tree can make, which is one of the most effective ways to control overfitting and ensure the model remains interpretable.',
+        difficulty: 'easy'
+    },
+    {
+        id: 56,
+        category: 'advanced',
+        question: 'What is the risk of having a very high max_depth value?',
+        options: [
+            'Higher memory usage only',
+            'Increased risk of underfitting',
+            'Increased risk of overfitting',
+            'Slower prediction time'
+        ],
+        answer: 2,
+        explanation: 'Very high max_depth values can lead to overfitting as the tree may learn noise in the training data. Deep trees can create highly specific rules that perfectly fit the training examples but fail to generalize to new data, capturing random fluctuations rather than underlying patterns.',
+        difficulty: 'medium'
+    },
+    {
+        id: 57,
+        category: 'advanced',
+        question: 'How does increasing min_samples_split affect tree complexity?',
+        options: [
+            'It makes the tree deeper',
+            'It has no effect on complexity',
+            'It reduces complexity by requiring more samples to split',
+            'It increases complexity by allowing more splits'
+        ],
+        answer: 2,
+        explanation: 'Higher min_samples_split values prevent splits that would create very small nodes, thus reducing tree complexity. This parameter ensures that splits are only made when there are sufficient samples to support meaningful divisions, preventing the tree from creating overly specific rules based on small data subsets.',
+        difficulty: 'medium'
+    },
+    {
+        id: 58,
+        category: 'advanced',
+        question: 'Why are decision trees particularly prone to overfitting?',
+        options: [
+            'They require large amounts of data',
+            'They can keep growing until each leaf has pure classes',
+            'They have too many parameters to tune',
+            'They are based on complex mathematical formulas'
+        ],
+        answer: 1,
+        explanation: 'Decision trees can grow until each leaf node contains only samples from one class, perfectly fitting the training data but likely overfitting. Without proper constraints, trees will continue splitting until they memorize the training set, creating an overly complex model that captures noise rather than signal.',
+        difficulty: 'hard'
+    },
+    {
+        id: 59,
+        category: 'advanced',
+        question: 'What is meant by "bias toward features with more levels"?',
+        options: [
+            'The algorithm is biased toward the first features in the dataset',
+            'Features with more categories are more likely to be selected for splits',
+            'Features with missing values are ignored',
+            'Features with higher numerical values are preferred'
+        ],
+        answer: 1,
+        explanation: 'Decision trees tend to prefer features with more categories/levels because they offer more possible split points. Features with many unique values (like ID columns or high-cardinality categorical variables) have more opportunities to create pure splits, giving them an unfair advantage in the splitting process even if they\'re not truly more predictive.',
+        difficulty: 'hard'
+    },
+    {
+        id: 60,
+        category: 'advanced',
+        question: 'How does pruning help with model generalization?',
+        options: [
+            'By changing the splitting criteria',
+            'By reducing the number of features',
+            'By removing branches that may have learned noise specific to training data',
+            'By adding more branches to capture patterns'
+        ],
+        answer: 2,
+        explanation: 'Pruning improves generalization by simplifying the tree and removing branches that may represent noise rather than true patterns. By eliminating splits that don\'t significantly improve predictive performance, pruning creates a more robust model that focuses on the most important decision rules, reducing variance and improving performance on unseen data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 61,
+        category: 'applications',
+        question: 'How are decision trees used in medical diagnosis?',
+        options: [
+            'To analyze medical images directly',
+            'To optimize hospital resource allocation',
+            'To diagnose diseases based on symptoms and test results',
+            'To predict patient wait times'
+        ],
+        answer: 2,
+        explanation: 'Decision trees help doctors diagnose diseases by modeling the relationship between symptoms, test results, and medical conditions. They provide transparent decision paths that medical professionals can easily interpret and validate, making them valuable for clinical decision support systems where explainability is crucial for trust and regulatory compliance.',
+        difficulty: 'medium'
+    },
+    {
+        id: 62,
+        category: 'applications',
+        question: 'What factors do banks consider in credit risk assessment using decision trees?',
+        options: [
+            'Only employment status',
+            'Only credit score',
+            'Income, credit history, employment status, and other factors',
+            'Only income level'
+        ],
+        answer: 2,
+        explanation: 'Banks use multiple factors including income, credit history, employment status, and other financial indicators to assess credit risk. Decision trees can combine these diverse data types into a transparent scoring model that explains why an application was approved or denied, which is important for regulatory compliance and customer communication.',
+        difficulty: 'medium'
+    },
+    {
+        id: 63,
+        category: 'applications',
+        question: 'How do businesses use decision trees for customer segmentation?',
+        options: [
+            'By using geographic location only',
+            'By analyzing customer feedback only',
+            'By segmenting customers based on purchasing behavior, demographics, and preferences',
+            'By tracking website clicks only'
+        ],
+        answer: 2,
+        explanation: 'Businesses use decision trees to segment customers based on multiple attributes for targeted marketing strategies. The transparent rule-based structure helps marketing teams understand segment characteristics and develop tailored campaigns, while also identifying the most discriminative features that differentiate customer groups.',
+        difficulty: 'medium'
+    },
+    {
+        id: 64,
+        category: 'applications',
+        question: 'What industrial applications use decision trees?',
+        options: [
+            'Only employee management',
+            'Fault detection, quality control, and predictive maintenance',
+            'Only supply chain optimization',
+            'Only product design'
+        ],
+        answer: 1,
+        explanation: 'In manufacturing, decision trees help with fault detection, quality control, and predictive maintenance processes. They can identify patterns in sensor data that indicate equipment malfunctions or product defects, providing interpretable rules that engineers can use for troubleshooting and process optimization.',
+        difficulty: 'medium'
+    },
+    {
+        id: 65,
+        category: 'applications',
+        question: 'What is Random Forest?',
+        options: [
+            'A clustering algorithm',
+            'A type of neural network',
+            'An ensemble method that combines multiple decision trees',
+            'A single very large decision tree'
+        ],
+        answer: 2,
+        explanation: 'Random Forest is an ensemble learning method that combines multiple decision trees to improve performance. By creating many diverse trees through bagging and random feature selection, then averaging their predictions, Random Forest reduces variance and overfitting while maintaining some interpretability through feature importance measures.',
+        difficulty: 'easy'
+    },
+    {
+        id: 66,
+        category: 'applications',
+        question: 'How does Random Forest improve upon single decision trees?',
+        options: [
+            'By eliminating the need for pruning',
+            'By reducing overfitting and increasing stability',
+            'By using only one feature per tree',
+            'By making trees deeper'
+        ],
+        answer: 1,
+        explanation: 'Random Forest reduces overfitting by averaging multiple trees and increases stability through bootstrap aggregation. The ensemble approach leverages the "wisdom of crowds" principle, where multiple weak learners (individual trees) combine to form a strong, robust predictor that is less sensitive to noise in the training data.',
+        difficulty: 'medium'
+    },
+    {
+        id: 67,
+        category: 'applications',
+        question: 'What is the n_estimators parameter in Random Forest?',
+        options: [
+            'Minimum samples to split',
+            'Number of trees in the forest',
+            'Maximum depth of each tree',
+            'Number of features to consider'
+        ],
+        answer: 1,
+        explanation: 'n_estimators controls how many decision trees are included in the random forest ensemble. Generally, more trees lead to better performance and stability, but with diminishing returns beyond a certain point (typically 100-500 trees) and increased computational cost.',
+        difficulty: 'easy'
+    },
+    {
+        id: 68,
+        category: 'applications',
+        question: 'When would you choose a single decision tree over Random Forest?',
+        options: [
+            'When working with image data',
+            'When maximum accuracy is required',
+            'When interpretability is more important than accuracy',
+            'When dealing with very large datasets'
+        ],
+        answer: 2,
+        explanation: 'Single decision trees are preferred when model interpretability is crucial, even if they sacrifice some accuracy. In domains like healthcare, finance, or legal applications, the ability to explain exactly how a decision was made is often more important than slight improvements in predictive performance.',
+        difficulty: 'medium'
+    },
+    {
+        id: 69,
+        category: 'applications',
+        question: 'When would you choose Random Forest over a single decision tree?',
+        options: [
+            'When working with very small datasets',
+            'When prediction accuracy is the primary concern',
+            'When computational resources are limited',
+            'When you need to explain decisions to non-technical stakeholders'
+        ],
+        answer: 1,
+        explanation: 'Random Forest is preferred when the main goal is high predictive accuracy, even if the model is less interpretable. For applications where performance is critical and the "black box" nature is acceptable (like recommendation systems or fraud detection), Random Forest typically delivers superior results.',
+        difficulty: 'medium'
+    },
+    {
+        id: 70,
+        category: 'applications',
+        question: 'What is the main advantage of Random Forest?',
+        options: [
+            'Better for small datasets',
+            'Simpler implementation',
+            'Higher accuracy and better generalization',
+            'Faster training time'
+        ],
+        answer: 2,
+        explanation: 'The main advantage of Random Forest is typically higher accuracy and better generalization compared to single decision trees. By combining multiple diverse models, Random Forest reduces variance, handles noise better, and is less prone to overfitting, making it one of the most accurate off-the-shelf machine learning algorithms.',
+        difficulty: 'easy'
+    },
+    {
+        id: 71,
+        category: 'applications',
+        question: 'What is the main disadvantage of Random Forest?',
+        options: [
+            'Inability to handle categorical features',
+            'Reduced interpretability compared to single trees',
+            'Longer training time for small datasets',
+            'Lower accuracy'
+        ],
+        answer: 1,
+        explanation: 'The main disadvantage is reduced interpretability since you have many trees instead of one transparent model. While feature importance scores provide some insight, you cannot easily trace the decision path for a specific prediction, which can be problematic in applications requiring model explainability.',
+        difficulty: 'medium'
+    },
+    {
+        id: 72,
+        category: 'applications',
+        question: 'How does Random Forest reduce overfitting?',
+        options: [
+            'By using a single complex tree',
+            'By removing features',
+            'By averaging predictions from multiple trees trained on different data subsets',
+            'By using simpler trees'
+        ],
+        answer: 2,
+        explanation: 'Random Forest reduces overfitting through bagging - training multiple trees on different bootstrap samples and averaging their predictions. This ensemble approach reduces variance by ensuring that individual trees\' errors cancel out, while the random feature selection introduces additional diversity that further improves generalization.',
+        difficulty: 'medium'
+    },
+    {
+        id: 73,
+        category: 'applications',
+        question: 'What is the trade-off between decision trees and Random Forests?',
+        options: [
+            'Training time vs. Prediction time',
+            'Interpretability vs. Accuracy',
+            'Simplicity vs. Complexity',
+            'Speed vs. Memory'
+        ],
+        answer: 1,
+        explanation: 'The main trade-off is between interpretability (better with single trees) and accuracy (better with Random Forests). Single trees provide complete transparency but may sacrifice predictive power, while Random Forests offer superior performance at the cost of interpretability, creating a classic machine learning trade-off between explainability and accuracy.',
+        difficulty: 'medium'
+    },
+    {
+        id: 74,
+        category: 'applications',
+        question: 'What type of data can decision trees handle?',
+        options: [
+            'Only text data',
+            'Both numerical and categorical data',
+            'Only categorical data',
+            'Only numerical data'
+        ],
+        answer: 1,
+        explanation: 'Decision trees can handle both numerical and categorical data without requiring extensive preprocessing. This flexibility makes them particularly useful for real-world datasets that often contain mixed data types, reducing the need for complex feature engineering pipelines.',
+        difficulty: 'easy'
+    },
+    {
+        id: 75,
+        category: 'applications',
+        question: 'Why are decision trees called "white box" models?',
+        options: [
+            'Because they were invented by White Box Analytics',
+            'Because their decision process is transparent and easy to understand',
+            'Because they always use white backgrounds in visualizations',
+            'Because they work well with clean data'
+        ],
+        answer: 1,
+        explanation: 'They are called "white box" models because the reasoning behind their predictions is transparent and easily interpretable. Unlike black box models (like neural networks) where decisions are opaque, decision trees provide clear, human-readable rules that explain exactly how each prediction was derived.',
+        difficulty: 'easy'
+    },
+    {
+        id: 76,
+        category: 'applications',
+        question: 'In what scenarios is interpretability crucial for model selection?',
+        options: [
+            'Weather forecasting only',
+            'Stock price prediction only',
+            'Medical diagnosis, loan approvals, and legal decisions',
+            'Image recognition only'
+        ],
+        answer: 2,
+        explanation: 'Interpretability is crucial in domains where decisions have significant consequences and need to be explainable to stakeholders. In healthcare, finance, criminal justice, and other high-stakes applications, models must provide transparent reasoning to ensure fairness, identify biases, comply with regulations, and build trust with end-users.',
+        difficulty: 'medium'
+    },
+    {
+        id: 77,
+        category: 'applications',
+        question: 'How do decision trees handle non-linear relationships?',
+        options: [
+            'By using kernel tricks',
+            'Naturally, through their hierarchical splitting structure',
+            'By transforming features first',
+            'They cannot handle non-linear relationships'
+        ],
+        answer: 1,
+        explanation: 'Decision trees naturally handle non-linear relationships through their recursive partitioning of the feature space. Unlike linear models that assume straight-line relationships, trees can capture complex, non-linear patterns by creating axis-parallel decision boundaries that approximate any shape in the feature space.',
+        difficulty: 'medium'
+    },
+    {
+        id: 78,
+        category: 'applications',
+        question: 'What is ensemble learning?',
+        options: [
+            'Training models sequentially',
+            'Combining multiple models to improve performance',
+            'Using a single very complex model',
+            'A type of deep learning'
+        ],
+        answer: 1,
+        explanation: 'Ensemble learning combines multiple models to achieve better performance than any single model could. By leveraging the diversity of multiple learners, ensemble methods like Random Forest, Gradient Boosting, and Bagging reduce variance, bias, or both, leading to more accurate and robust predictions across various problem domains.',
+        difficulty: 'easy'
+    },
+    {
+        id: 79,
+        category: 'applications',
+        question: 'In loan approval scenarios, which approach is more interpretable?',
+        options: [
+            'Support vector machine',
+            'Neural network',
+            'Single decision tree',
+            'Random Forest'
+        ],
+        answer: 2,
+        explanation: 'Single decision trees are more interpretable, which is important for explaining loan approval decisions to customers. Regulatory requirements like "right to explanation" often mandate that financial institutions provide clear reasons for credit decisions, making transparent models like decision trees preferable despite potentially lower accuracy.',
+        difficulty: 'medium'
+    },
+    {
+        id: 80,
+        category: 'applications',
+        question: 'Which approach typically has higher accuracy in most applications?',
+        options: [
+            'Linear regression',
+            'Single decision tree',
+            'Random Forest',
+            'K-nearest neighbors'
+        ],
+        answer: 2,
+        explanation: 'Random Forest typically achieves higher accuracy than single decision trees due to the ensemble effect. By combining multiple diverse trees, Random Forest reduces overfitting and variance, often ranking among the top-performing algorithms in machine learning competitions and real-world applications across various domains.',
+        difficulty: 'easy'
+    }
+];        // Quiz state
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let markedForReview = [];
+        let quizStarted = false;
+        let selectedCategory = '';
+        let startTime = null;
+        let timerInterval = null;
+        let timeElapsed = 0;
+        
+        // DOM elements
+        const quizSelection = document.getElementById('quiz-selection');
+        const quizInterface = document.getElementById('quiz-interface');
+        const resultsScreen = document.getElementById('results-screen');
+        const leaderboard = document.getElementById('leaderboard');
+        const quizProgress = document.getElementById('quiz-progress');
+        const quizProgressText = document.getElementById('quiz-progress-text');
+        const totalQuestions = document.getElementById('total-questions');
+        const quizCategory = document.getElementById('quiz-category');
+        const quizScore = document.getElementById('quiz-score');
+        const quizAccuracy = document.getElementById('quiz-accuracy');
+        const quizTimer = document.getElementById('quiz-timer');
+        const questionText = document.getElementById('question-text');
+        const difficultyBadge = document.getElementById('difficulty-badge');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const correctFeedback = document.getElementById('correct-feedback');
+        const incorrectFeedback = document.getElementById('incorrect-feedback');
+        const correctExplanation = document.getElementById('correct-explanation');
+        const correctAnswerText = document.getElementById('correct-answer-text');
+        const incorrectExplanation = document.getElementById('incorrect-explanation');
+        const prevQuestionButton = document.getElementById('prev-question');
+        const nextQuestionButton = document.getElementById('next-question');
+        const markReviewButton = document.getElementById('mark-review');
+        const finalScore = document.getElementById('final-score');
+        const correctAnswers = document.getElementById('correct-answers');
+        const incorrectAnswers = document.getElementById('incorrect-answers');
+        const skippedQuestions = document.getElementById('skipped-questions');
+        const timeTaken = document.getElementById('time-taken');
+        const badgesContainer = document.getElementById('badges-container');
+        const reviewQuizButton = document.getElementById('review-quiz');
+        const newQuizButton = document.getElementById('new-quiz');
+        const shareResultsButton = document.getElementById('share-results');
+        const startQuizButton = document.getElementById('start-quiz');
+        const viewLeaderboardButton = document.getElementById('view-leaderboard');
+        const backToSelectionFromLeaderboard = document.getElementById('back-to-selection-from-leaderboard');
+        const leaderboardBody = document.getElementById('leaderboard-body');
+        const scoreCircle = document.getElementById('score-circle');
+        
+        // Category selection
+        const categoryPills = document.querySelectorAll('.category-pill');
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                // Remove previous selections
+                categoryPills.forEach(p => p.classList.remove('ring-2', 'ring-green-500'));
+                
+                // Select this category
+                pill.classList.add('ring-2', 'ring-green-500');
+                selectedCategory = pill.getAttribute('data-category');
+            });
+        });
+        
+        // Start quiz button
+        startQuizButton.addEventListener('click', () => {
+            if (!selectedCategory) {
+                alert('Please select a category first!');
+                return;
+            }
+            
+            startQuiz(selectedCategory);
+        });
+        
+        // View leaderboard button
+        viewLeaderboardButton.addEventListener('click', () => {
+            quizSelection.classList.add('hidden');
+            leaderboard.classList.remove('hidden');
+            populateLeaderboard();
+        });
+        
+        // Back to selection from leaderboard
+        backToSelectionFromLeaderboard.addEventListener('click', () => {
+            leaderboard.classList.add('hidden');
+            quizSelection.classList.remove('hidden');
+        });
+        
+        // Start quiz with selected category
+        function startQuiz(category) {
+            // Filter questions based on category
+            if (category === 'all') {
+                currentQuestions = [...quizData];
+            } else {
+                currentQuestions = quizData.filter(q => q.category === category);
+            }
+            
+            // Shuffle questions
+            currentQuestions = shuffleArray(currentQuestions);
+            
+            // Initialize user answers and review marks
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            markedForReview = new Array(currentQuestions.length).fill(false);
+            
+            // Update UI
+            quizSelection.classList.add('hidden');
+            quizInterface.classList.remove('hidden');
+            
+            // Set category title
+            const categoryTitles = {
+                'all': 'All Decision Tree Topics',
+                'fundamentals': 'Decision Tree Fundamentals',
+                'implementation': 'Decision Tree Implementation',
+                'advanced': 'Advanced Decision Tree Concepts',
+                'applications': 'Decision Tree Applications'
+            };
+            quizCategory.textContent = categoryTitles[category];
+            totalQuestions.textContent = currentQuestions.length;
+            
+            // Start with first question
+            currentQuestionIndex = 0;
+            quizStarted = true;
+            
+            // Start timer
+            startTime = new Date();
+            timeElapsed = 0;
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            displayQuestion();
+            updateProgress();
+        }
+        
+        // Update timer
+        function updateTimer() {
+            timeElapsed++;
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            quizTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Display current question
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            
+            // Update progress text
+            quizProgressText.innerHTML = `Question <span class="question-counter">${currentQuestionIndex + 1}</span> of <span id="total-questions">${currentQuestions.length}</span>`;
+            
+            // Set question text
+            questionText.textContent = question.question;
+            
+            // Set difficulty badge
+            difficultyBadge.textContent = question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1);
+            difficultyBadge.className = 'difficulty-badge';
+            difficultyBadge.classList.add(`difficulty-${question.difficulty}`);
+            
+            // Create options HTML
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.setAttribute('data-index', index);
+                
+                optionElement.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center mr-3 option-indicator">
+                            <span class="text-gray-500">${String.fromCharCode(65 + index)}</span>
+                        </div>
+                        <p>${option}</p>
+                    </div>
+                `;
+                
+                optionElement.addEventListener('click', () => {
+                    // Remove previous selections
+                    optionsContainer.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Select this option
+                    optionElement.classList.add('selected');
+                    
+                    // Store answer
+                    const selectedIndex = parseInt(optionElement.getAttribute('data-index'));
+                    userAnswers[currentQuestionIndex] = selectedIndex;
+                    
+                    // Check answer
+                    checkAnswer(selectedIndex);
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // If user already answered this question, show their selection
+            if (userAnswers[currentQuestionIndex] !== null) {
+                optionsContainer.querySelectorAll('.option')[userAnswers[currentQuestionIndex]].classList.add('selected');
+                
+                // Show feedback if already answered
+                showFeedback(userAnswers[currentQuestionIndex]);
+            } else {
+                // Hide feedback if not answered
+                feedbackContainer.classList.add('hidden');
+            }
+            
+            // Update review button state
+            if (markedForReview[currentQuestionIndex]) {
+                markReviewButton.innerHTML = '<i class="fas fa-flag mr-2"></i> Remove Review Mark';
+                markReviewButton.classList.add('bg-yellow-600');
+            } else {
+                markReviewButton.innerHTML = '<i class="fas fa-flag mr-2"></i> Mark for Review';
+                markReviewButton.classList.remove('bg-yellow-600');
+            }
+            
+            // Update navigation buttons
+            updateNavigation();
+        }
+        
+        // Check if answer is correct and show feedback
+        function checkAnswer(selectedIndex) {
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = selectedIndex === question.answer;
+            
+            // Show feedback
+            showFeedback(selectedIndex);
+            
+            // Update score
+            updateScore();
+        }
+        
+        // Show feedback for answer
+        function showFeedback(selectedIndex) {
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = selectedIndex === question.answer;
+            
+            // Show appropriate feedback
+            if (isCorrect) {
+                correctFeedback.classList.remove('hidden');
+                incorrectFeedback.classList.add('hidden');
+                correctExplanation.textContent = question.explanation;
+            } else {
+                correctFeedback.classList.add('hidden');
+                incorrectFeedback.classList.remove('hidden');
+                
+                // Update explanation with correct answer
+                const correctOption = question.options[question.answer];
+                correctAnswerText.textContent = correctOption;
+                incorrectExplanation.textContent = question.explanation;
+            }
+            
+            // Show feedback container
+            feedbackContainer.classList.remove('hidden');
+            
+            // Highlight correct and incorrect answers
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                if (index === question.answer) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.answer) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Mark question for review
+        markReviewButton.addEventListener('click', () => {
+            markedForReview[currentQuestionIndex] = !markedForReview[currentQuestionIndex];
+            
+            if (markedForReview[currentQuestionIndex]) {
+                markReviewButton.innerHTML = '<i class="fas fa-flag mr-2"></i> Remove Review Mark';
+                markReviewButton.classList.add('bg-yellow-600');
+            } else {
+                markReviewButton.innerHTML = '<i class="fas fa-flag mr-2"></i> Mark for Review';
+                markReviewButton.classList.remove('bg-yellow-600');
+            }
+        });
+        
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            quizProgress.style.width = `${progress}%`;
+        }
+        
+        // Update score display
+        function updateScore() {
+            if (userAnswers.filter(a => a !== null).length === 0) return;
+            
+            const answeredQuestions = userAnswers.filter(a => a !== null);
+            const correctCount = answeredQuestions.filter((answer, index) => 
+                answer === currentQuestions[index].answer
+            ).length;
+            
+            const score = Math.round((correctCount / answeredQuestions.length) * 100);
+            const accuracy = Math.round((correctCount / answeredQuestions.length) * 100);
+            
+            // Animate score counter
+            animateCounter(quizScore, parseInt(quizScore.textContent), score, 1000);
+            quizAccuracy.textContent = `Accuracy: ${accuracy}%`;
+        }
+        
+        // Animate counter
+        function animateCounter(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                element.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Update navigation buttons state
+        function updateNavigation() {
+            // Previous button
+            if (currentQuestionIndex === 0) {
+                prevQuestionButton.disabled = true;
+                prevQuestionButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevQuestionButton.disabled = false;
+                prevQuestionButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // Next button
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                nextQuestionButton.innerHTML = 'Finish Quiz <i class="fas fa-flag-checkered ml-2"></i>';
+            } else {
+                nextQuestionButton.innerHTML = 'Next Question <i class="fas fa-arrow-right ml-2"></i>';
+            }
+        }
+        
+        // Navigate to previous question
+        prevQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                updateProgress();
+            }
+        });
+        
+        // Navigate to next question or finish quiz
+        nextQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                updateProgress();
+            } else {
+                finishQuiz();
+            }
+        });
+        
+        // Finish quiz and show results
+        function finishQuiz() {
+            // Stop timer
+            clearInterval(timerInterval);
+            
+            quizInterface.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            // Calculate results
+            const totalQuestions = currentQuestions.length;
+            const answeredQuestions = userAnswers.filter(a => a !== null).length;
+            const correctCount = userAnswers.filter((answer, index) => 
+                answer !== null && answer === currentQuestions[index].answer
+            ).length;
+            const incorrectCount = answeredQuestions - correctCount;
+            const skippedCount = totalQuestions - answeredQuestions;
+            const score = Math.round((correctCount / totalQuestions) * 100);
+            
+            // Format time taken
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update results display with animation
+            animateCounter(finalScore, 0, score, 2000);
+            animateCounter(correctAnswers, 0, correctCount, 1500);
+            animateCounter(incorrectAnswers, 0, incorrectCount, 1500);
+            animateCounter(skippedQuestions, 0, skippedCount, 1500);
+            timeTaken.textContent = timeString;
+            
+            // Animate score circle
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (score / 100) * circumference;
+            scoreCircle.style.strokeDashoffset = offset;
+            
+            // Award badges based on performance
+            awardBadges(score, correctCount);
+            
+            // Save to leaderboard
+            saveToLeaderboard(score, selectedCategory, timeString);
+            
+            // Create confetti effect for good scores
+            if (score >= 80) {
+                createConfetti();
+            }
+        }
+        
+        // Save result to leaderboard
+        function saveToLeaderboard(score, category, time) {
+            const leaderboardData = JSON.parse(localStorage.getItem('decisionTreeLeaderboard') || '[]');
+            
+            const result = {
+                player: 'You',
+                score: score,
+                category: category,
+                time: time,
+                date: new Date().toLocaleDateString()
+            };
+            
+            leaderboardData.push(result);
+            
+            // Keep only top 10 results
+            leaderboardData.sort((a, b) => b.score - a.score);
+            if (leaderboardData.length > 10) {
+                leaderboardData.splice(10);
+            }
+            
+            localStorage.setItem('decisionTreeLeaderboard', JSON.stringify(leaderboardData));
+        }
+        
+        // Populate leaderboard
+        function populateLeaderboard() {
+            const leaderboardData = JSON.parse(localStorage.getItem('decisionTreeLeaderboard') || '[]');
+            
+            leaderboardBody.innerHTML = '';
+            
+            if (leaderboardData.length === 0) {
+                leaderboardBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">No results yet. Complete a quiz to appear here!</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            leaderboardData.forEach((result, index) => {
+                const row = document.createElement('tr');
+                row.className = 'leaderboard-item';
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full ${index < 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
+                            ${index + 1}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${result.player}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${result.score}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${result.category}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${result.date}</td>
+                `;
+                
+                leaderboardBody.appendChild(row);
+            });
+        }
+        
+        // Award badges based on performance
+        function awardBadges(score, correctCount) {
+            badgesContainer.innerHTML = '';
+            
+            // Accuracy badge
+            let accuracyBadge = null;
+            if (score === 100) {
+                accuracyBadge = {
+                    title: 'Perfect Score',
+                    icon: 'fa-star',
+                    bgColor: 'bg-purple-100',
+                    textColor: 'text-purple-800',
+                    description: 'Got every question correct!'
+                };
+            } else if (score >= 90) {
+                accuracyBadge = {
+                    title: 'Decision Tree Expert',
+                    icon: 'fa-medal',
+                    bgColor: 'bg-blue-100',
+                    textColor: 'text-blue-800',
+                    description: 'Scored 90% or higher!'
+                };
+            } else if (score >= 80) {
+                accuracyBadge = {
+                    title: 'Great Job',
+                    icon: 'fa-trophy',
+                    bgColor: 'bg-green-100',
+                    textColor: 'text-green-800',
+                    description: 'Scored 80% or higher!'
+                };
+            } else if (score >= 70) {
+                accuracyBadge = {
+                    title: 'Good Effort',
+                    icon: 'fa-award',
+                    bgColor: 'bg-indigo-100',
+                    textColor: 'text-indigo-800',
+                    description: 'Scored 70% or higher!'
+                };
+            }
+            
+            // Persistence badge
+            const persistenceBadge = {
+                title: 'Persistence',
+                icon: 'fa-hourglass-half',
+                bgColor: 'bg-pink-100',
+                textColor: 'text-pink-800',
+                description: 'Completed all questions!'
+            };
+            
+            // Speed badge (if completed quickly)
+            const speedBadge = timeElapsed < 600 ? { // Less than 10 minutes
+                title: 'Speed Runner',
+                icon: 'fa-bolt',
+                bgColor: 'bg-yellow-100',
+                textColor: 'text-yellow-800',
+                description: 'Completed the quiz in under 10 minutes!'
+            } : null;
+            
+            // Category expert badges
+            const categories = [...new Set(currentQuestions.map(q => q.category))];
+            const categoryBadges = categories.map(category => {
+                const categoryQuestions = currentQuestions.filter(q => q.category === category);
+                const categoryAnswers = userAnswers.filter((answer, index) => 
+                    currentQuestions[index].category === category
+                );
+                const categoryCorrect = categoryAnswers.filter((answer, index) => 
+                    answer === categoryQuestions[index].answer
+                ).length;
+                
+                if (categoryCorrect === categoryQuestions.length) {
+                    return {
+                        title: `${category.charAt(0).toUpperCase() + category.slice(1)} Expert`,
+                        icon: 'fa-crown',
+                        bgColor: 'bg-red-100',
+                        textColor: 'text-red-800',
+                        description: `Perfect score in ${category} questions!`
+                    };
+                }
+                return null;
+            }).filter(badge => badge !== null);
+            
+            // All badges to award
+            const badgesToAward = [];
+            if (accuracyBadge) badgesToAward.push(accuracyBadge);
+            badgesToAward.push(persistenceBadge);
+            if (speedBadge) badgesToAward.push(speedBadge);
+            badgesToAward.push(...categoryBadges);
+            
+            // Display badges
+            badgesToAward.forEach(badge => {
+                const badgeElement = document.createElement('div');
+                badgeElement.className = `badge ${badge.bgColor} ${badge.textColor} flex flex-col items-center justify-center p-4`;
+                badgeElement.innerHTML = `
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2 ${badge.textColor}">
+                        <i class="fas ${badge.icon} text-xl"></i>
+                    </div>
+                    <h5 class="font-bold">${badge.title}</h5>
+                    <p class="text-xs mt-1">${badge.description}</p>
+                `;
+                badgesContainer.appendChild(badgeElement);
+            });
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6'];
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 6000);
+            }
+        }
+        
+        // Review quiz button
+        reviewQuizButton.addEventListener('click', () => {
+            resultsScreen.classList.add('hidden');
+            quizInterface.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            displayQuestion();
+            updateProgress();
+        });
+        
+        // New quiz button
+        newQuizButton.addEventListener('click', () => {
+            resultsScreen.classList.add('hidden');
+            quizSelection.classList.remove('hidden');
+            selectedCategory = '';
+            categoryPills.forEach(p => p.classList.remove('ring-2', 'ring-green-500'));
+        });
+        
+        // Share results button
+        shareResultsButton.addEventListener('click', () => {
+            const score = document.getElementById('final-score').textContent;
+            const category = quizCategory.textContent;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'NITDA/NCAIR Decision Trees Quiz',
+                    text: `I scored ${score}% on the ${category} quiz! Test your knowledge too!`,
+                    url: window.location.href
+                })
+                .catch(error => {
+                    alert(`I scored ${score}% on the ${category} quiz! Test your knowledge too!`);
+                });
+            } else {
+                alert(`I scored ${score}% on the ${category} quiz! Test your knowledge too!`);
+            }
+        });
+        
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        // Initialize the first category as selected
+        categoryPills[0].classList.add('ring-2', 'ring-green-500');
+        selectedCategory = categoryPills[0].getAttribute('data-category');
+        
+        // Initialize leaderboard
+        if (!localStorage.getItem('decisionTreeLeaderboard')) {
+            localStorage.setItem('decisionTreeLeaderboard', JSON.stringify([]));
+        }
+    </script>
+</body>
+</html>

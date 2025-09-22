@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Primary Meta Tags -->
+  <title>Decision Tree Mastery | NITDA/NCAIR ML Portal</title>
+  <meta name="title" content="Decision Tree Mastery | NITDA/NCAIR ML Portal">
+  <meta name="description" content="Master Decision Trees with NITDA/NCAIR ML Portal. Learn how decision trees work, their mathematical foundations (Gini impurity & Information Gain), Python implementation, pruning techniques, and real-world applications. Includes an interactive exercise to build your own tree.">
+
+  <!-- Keywords for SEO -->
+  <meta name="keywords" content="Decision Tree, Machine Learning, Random Forest, Gini impurity, Information Gain, scikit-learn, ML Nigeria, NITDA, NCAIR, classification, regression, overfitting, pruning, Python ML, data science, interactive ML learning">
+
+  <!-- Author -->
+  <meta name="Nuhu Muhammad Datti" content="NITDA/NCAIR ML Mastery Portal">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nuhudatti.github.io/NITDA-NCAIR-ML-Master-Decision-Trees/">
+  <meta property="og:title" content="Decision Tree Mastery | NITDA/NCAIR ML Portal">
+  <meta property="og:description" content="Learn Decision Trees step by step: fundamentals, Python coding, advanced pruning, and real-world use cases. Part of the NITDA/NCAIR Machine Learning Mastery Series.">
+  <meta property="og:image" content="Course.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://nuhudatti.github.io/NITDA-NCAIR-ML-Master-Decision-Trees/">
+  <meta property="twitter:title" content="Decision Tree Mastery | NITDA/NCAIR ML Portal">
+  <meta property="twitter:description" content="Master Decision Trees: from fundamentals to Python coding & real-world applications. Part of NITDA/NCAIR ML Mastery.">
+  <meta property="twitter:image" content="Couse.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://ml.nitda-ncair.gov/assets/img/favicon.png">
+
+  <!-- Viewport & Charset -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ncair: {
+                            primary: '#0C4DA2',
+                            secondary: '#FF6B00',
+                            accent: '#00A651',
+                            dark: '#1D2939',
+                            light: '#F2F4F7'
+                        }
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+            min-height: 100vh;
+        }
+        
+        .header-glow {
+            box-shadow: 0 4px 20px rgba(12, 77, 162, 0.15);
+        }
+        
+        .concept-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #0C4DA2;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .learning-path {
+            display: none;
+        }
+        
+        .learning-path.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .code-block {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .code-header {
+            background: #2D2D30;
+            padding: 8px 16px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #CCC;
+            font-size: 14px;
+        }
+        
+        .code-keyword {
+            color: #569CD6;
+        }
+        
+        .code-function {
+            color: #DCDCAA;
+        }
+        
+        .code-string {
+            color: #CE9178;
+        }
+        
+        .code-comment {
+            color: #6A9955;
+        }
+        
+        .code-number {
+            color: #B5CEA8;
+        }
+        
+        .code-operator {
+            color: #D4D4D4;
+        }
+        
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: #F8F9FA;
+            border-radius: 0 0 8px 8px;
+            margin-top: -10px;
+        }
+        
+        .explanation.open {
+            max-height: 500px;
+        }
+        
+        .tree-diagram {
+            width: 100%;
+            height: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .interactive-demo {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #D1D5DB;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0C4DA2;
+            cursor: pointer;
+        }
+        
+        .floating-card {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .ai-brain {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        
+        .ai-brain::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(12, 77, 162, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(0.95); opacity: 0.6; }
+        }
+        
+        .hand-calculation {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #00A651;
+        }
+        
+        .exercise-box {
+            background: #e6f7ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #0C4DA2;
+        }
+        
+        .cheat-sheet {
+            background: #fff4e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #FF6B00;
+        }
+    </style>
+</head>
+<body class="bg-ncair-light min-h-screen">
+    <!-- Header -->
+    <header class="bg-ncair-primary text-white py-4 px-6 sticky top-0 z-50 header-glow">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="bg-white rounded-lg p-2 mr-3">
+                    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="#FF6B00"/>
+                        <path d="M10 10H30V30H10V10Z" fill="white"/>
+                        <path d="M15 15H25V25H15V15Z" fill="#0C4DA2"/>
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold">NITDA/NCAIR ML Mastery Portal</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6">
+                    <li><a href="#" class="hover:text-ncair-secondary transition"><i class="fas fa-home mr-1"></i> Home</a></li>
+                    <li><a href="#" class="hover:text-ncair-secondary transition"><i class="fas fa-book mr-1"></i> Courses</a></li>
+                    <li><a href="#" class="hover:text-ncair-secondary transition"><i class="fas fa-graduation-cap mr-1"></i> Learning Path</a></li>
+                    <li><a href="#" class="hover:text-ncair-secondary transition"><i class="fas fa-download mr-1"></i> Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-12 bg-gradient-to-r from-ncair-primary to-ncair-accent text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-4">Master Decision Trees: From Theory to Implementation</h2>
+            <p class="text-xl max-w-3xl mx-auto mb-8">A comprehensive curriculum designed by NITDA/NCAIR to build Nigeria's AI capabilities</p>
+            
+            <!-- AI Brain Visualization -->
+            <!-- <div class="ai-brain mb-8">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDA0L3N2ZyI+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSIxNDAiIGZpbGw9IiMwQzREQTIiIGZpbGwtb3BhY2l0eT0iMC4xIi8+CiAgPHBhdGggZD0iTTEwMCAxMDBIMjAwVjIwMEgxMDBWMTAwWiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgPHBhdGggZD0iTTEyMCAxMjBIMTgwVjE4MEgxMjBWMTIwWiIgZmlsbD0iI0ZGNkIwMCIgZmlsbC1vcGFjaXR5PSIwLjUiLz4KICA8Y2lyY2xlIGN4PSIxNTAiIGN5PSI4MCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjEyMCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjEyMCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjE2MCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjE2MCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjE2MCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjIyMCIgcj0iMTUiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgogIDxwYXRoIGQ9Ik0xMjAgODBDMTQwIDYwIDE2MCA2MCAxODAgODAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLW9wYWNpdHk9IjAuNiIvPgogIDxwYXRoIGQ9Ik04MCAxMjBDNjAgMTQwIDYwIDE2MCA4MCAxODAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLW9wYWNpdHk9IjAuNiIvPgogIDxwYXRoIGQ9Ik0yMjAgMTIwQzI0MCAxNDAgMjQwIDE2MCAyMjAgMTgwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1vcGFjaXR5PSIwLjYiLz4KPC9zdmc+" alt="AI Brain" class="w-full h-full">
+            </div> -->
+            <!-- Neural nodes & links -->
+<div class="ai-brain mb-8">
+  <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" aria-hidden="true">
+    <!-- links -->
+    <line x1="40" y1="40" x2="140" y2="80" stroke="#0C6" stroke-opacity="0.6" stroke-width="2"/>
+    <line x1="40" y1="160" x2="140" y2="120" stroke="#09A" stroke-opacity="0.6" stroke-width="2"/>
+    <line x1="260" y1="60" x2="160" y2="90" stroke="#06F" stroke-opacity="0.45" stroke-width="2"/>
+    <line x1="260" y1="140" x2="160" y2="110" stroke="#06F" stroke-opacity="0.45" stroke-width="2"/>
+    <!-- nodes -->
+    <circle cx="40" cy="40" r="8" fill="#fff" stroke="#0C6" stroke-width="2"/>
+    <circle cx="40" cy="160" r="8" fill="#fff" stroke="#09A" stroke-width="2"/>
+    <circle cx="140" cy="80" r="9" fill="#fff" stroke="#0C4DA2" stroke-width="2"/>
+    <circle cx="160" cy="100" r="10" fill="#fff" stroke="#0C4DA2" stroke-width="2"/>
+    <circle cx="260" cy="60" r="8" fill="#fff" stroke="#06F" stroke-width="2"/>
+    <circle cx="260" cy="140" r="8" fill="#fff" stroke="#06F" stroke-width="2"/>
+  </svg>
+</div>
+
+            
+            <p class="text-lg max-w-3xl mx-auto mb-10">Learn decision trees through intuitive explanations, practical examples, and interactive implementations</p>
+            <button id="startLearning" class="bg-ncair-secondary hover:bg-orange-600 px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">
+                <i class="fas fa-graduation-cap mr-2"></i> Start Learning Journey
+            </button>
+        </div>
+    </section>
+
+    <!-- Learning Path Section -->
+    <section class="py-16 bg-gradient-to-b from-white to-ncair-light">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-ncair-dark mb-4">Complete Decision Tree Mastery</h2>
+            <p class="text-center text-ncair-dark max-w-3xl mx-auto mb-12">Master decision trees through our structured, comprehensive curriculum with practical examples and implementations</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Progress Bar -->
+                <div class="bg-gray-200 rounded-full h-4 mb-12">
+                    <div class="progress-bar bg-ncair-secondary h-4 rounded-full w-0"></div>
+                </div>
+                
+                <!-- Learning Steps -->
+                <div class="space-y-12">
+                    <!-- Step 1: Introduction -->
+                    <div class="learning-path active">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Introduction to Decision Trees</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">📌 What is a Decision Tree?</h4>
+                                    <p class="text-ncair-dark mb-4">A <strong>Decision Tree</strong> is a tree-like model used for both classification (predicting categories) and regression (predicting continuous values). It mimics human decision-making by splitting data based on feature values.</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🌳 Real-World Analogy</h4>
+                                    <p class="text-ncair-dark mb-4">Think of a decision tree like a flowchart that helps you make decisions. For example, when deciding whether to play outside, you might ask:</p>
+                                    <ol class="list-decimal pl-5 text-ncair-dark mb-4">
+                                        <li>Is it raining? → If yes, stay inside</li>
+                                        <li>If not, is the temperature above 30°C? → If yes, stay inside</li>
+                                        <li>If not, go outside and play</li>
+                                    </ol>
+                                    
+                                    <!-- <div class="tree-diagram flex justify-center items-center mb-4">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHRleHQgeD0iMjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMEM0REEyIj5JcyBpdCBSYWluaW5nPzwvdGV4dD4KICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSI1MCIgcj0iMzAiIHN0cm9rZT0iIzBDNERBMiIgZmlsbD0id2hpdGUiLz4KICA8bGluZSB4MT0iMjUwIiB5MT0iODAiIHgyPSIxNTAiIHkyPSIxMzAiIHN0cm9rZT0iIzBDNERBMiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPGxpbmUgeDE9IjI1MCIgeTE9IjgwIiB4Mj0iMzUwIiB5Mj0iMTMwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwQzREQTIiPk5vPC90ZXh0PgogIDx0ZXh0IHg9IjM1MCIgeT0iMTgwIiBZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMEM0REEyIj5ZZXM8L3RleHQ+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTMwIiByPSIzMCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSIjMEM0REEyIi8+CiAgPGNpcmNsZSBjeD0iMzUwIiBjeT0iMTMwIiByPSIzMCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSJ3aGl0ZSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5QbGF5PC90ZXh0PgogIDx0ZXh0IHg9IjM1MCIgeT0iMTMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwQzREQTIiPklzIHRoZXJlIGEgUm9vZj88L3RleHQ+CiAgPGxpbmUgeDE9IjM1MCIgeTE9IjE2MCIgeDI9IjMwMCIgeTI9IjIxMCIgc3Ryb2tlPSIjMEM0REEyIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8bGluZSB4MT0iMzUwIiB5MT0iMTYwIiB4Mj0iNDAwIiB5Mj0iMjEwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDx0ZXh0IHg9IjMwMCIgeT0iMjYwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwQzREQTIiPlllczwvdGV4dD4KICA8dGV4dCB4PSI0MDAiIHk9IjI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMEM0REEyIj5ObzwvdGV4dD4KICA8Y2lyY2xlIGN4PSIzMDAiIGN5PSIyMTAiIHI9IjMwIiBzdHJva2U9IiMwQzREQTIiIGZpbGw9IiMwQzREQTIiLz4KICA8Y2lyY2xlIGN4PSI0MDAiIGN5PSIyMTAiIHI9IjMwIiBzdHJva2U9IiMwQzREQTIiIGZpbGw9IiNGRjZCMDAiLz4KICA8dGV4dCB4PSIzMDAiIHk9IjIxMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSI+UGxheTwvdGV4dD4KICA8dGV4dCB4PSI0MDAiIHk9IjIxMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSI+RG9uJ3QgUGxheTwvdGV4dD4KPC9zdmc+" alt="Decision Tree Example" class="max-h-full">
+                                    </div> -->
+
+                                    <!-- Simple Decision Tree -->
+<div class="tree-diagram flex justify-center items-center mb-4">
+  <svg width="500" height="300" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" class="max-h-full">
+    <!-- Root -->
+    <circle cx="250" cy="50" r="30" fill="#fff" stroke="#0C4DA2" stroke-width="2"/>
+    <text x="250" y="55" text-anchor="middle" fill="#0C4DA2" font-size="12">Rain?</text>
+
+    <!-- Branch lines -->
+    <line x1="250" y1="80" x2="150" y2="130" stroke="#0C4DA2" stroke-width="2"/>
+    <line x1="250" y1="80" x2="350" y2="130" stroke="#0C4DA2" stroke-width="2"/>
+
+    <!-- Left Node -->
+    <circle cx="150" cy="130" r="28" fill="#0C4DA2"/>
+    <text x="150" y="135" text-anchor="middle" fill="white" font-size="12">Play</text>
+
+    <!-- Right Node -->
+    <circle cx="350" cy="130" r="28" fill="#fff" stroke="#0C4DA2" stroke-width="2"/>
+    <text x="350" y="135" text-anchor="middle" fill="#0C4DA2" font-size="12">Roof?</text>
+
+    <!-- Branches from Right Node -->
+    <line x1="350" y1="160" x2="300" y2="210" stroke="#0C4DA2" stroke-width="2"/>
+    <line x1="350" y1="160" x2="400" y2="210" stroke="#0C4DA2" stroke-width="2"/>
+
+    <!-- Leaf: Yes -->
+    <circle cx="300" cy="210" r="25" fill="#0C4DA2"/>
+    <text x="300" y="215" text-anchor="middle" fill="white" font-size="12">Play</text>
+
+    <!-- Leaf: No -->
+    <circle cx="400" cy="210" r="25" fill="#FF6B00"/>
+    <text x="400" y="215" text-anchor="middle" fill="white" font-size="12">Don’t</text>
+  </svg>
+</div>
+
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🎯 Key Terminology</h4>
+                                    <ul class="list-disc pl-5 text-ncair-dark">
+                                        <li><strong>Root Node</strong>: The starting point representing the entire dataset</li>
+                                        <li><strong>Decision Nodes</strong>: Intermediate nodes that split the data based on conditions</li>
+                                        <li><strong>Leaf Nodes</strong>: Terminal nodes that provide the final output/prediction</li>
+                                        <li><strong>Branches</strong>: Connections between nodes representing decision outcomes</li>
+                                        <li><strong>Pruning</strong>: Removing unnecessary branches to prevent overfitting</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <div></div> <!-- Empty div for spacing -->
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: How Decision Trees Work <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: How They Work -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">2</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">How Decision Trees Work</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">⚙️ The Splitting Process</h4>
+                                    <p class="text-ncair-dark mb-4">Decision trees work by recursively splitting the data into subsets based on the value of input features. The goal is to create subsets that are as pure as possible (containing mostly one class).</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🎯 Splitting Criteria</h4>
+                                    <p class="text-ncair-dark mb-4">The algorithm chooses the best feature to split on using mathematical criteria:</p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Gini Impurity</h5>
+                                            <p class="text-sm text-ncair-dark">Measures how often a randomly chosen element would be incorrectly labeled</p>
+                                            <p class="text-xs mt-2 font-mono bg-ncair-primary/10 p-2 rounded">Gini = 1 - Σ(p_i)²</p>
+                                        </div>
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Information Gain</h5>
+                                            <p class="text-sm text-ncair-dark">Measures the reduction in entropy after dataset is split</p>
+                                            <p class="text-xs mt-2 font-mono bg-ncair-primary/10 p-2 rounded">IG = Entropy(parent) - Σ[(N_child/N_parent) * Entropy(child)]</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">📊 Simple Example: Weather Dataset</h4>
+                                    <div class="overflow-x-auto mb-4">
+                                        <table class="min-w-full bg-white border border-gray-200">
+                                            <thead>
+                                                <tr class="bg-ncair-primary text-white">
+                                                    <th class="py-2 px-4 border">Outlook</th>
+                                                    <th class="py-2 px-4 border">Temperature</th>
+                                                    <th class="py-2 px-4 border">Humidity</th>
+                                                    <th class="py-2 px-4 border">Windy</th>
+                                                    <th class="py-2 px-4 border">Play</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td class="py-2 px-4 border">Sunny</td><td class="py-2 px-4 border">Hot</td><td class="py-2 px-4 border">High</td><td class="py-2 px-4 border">False</td><td class="py-2 px-4 border">No</td></tr>
+                                                <tr><td class="py-2 px-4 border">Sunny</td><td class="py-2 px-4 border">Hot</td><td class="py-2 px-4 border">High</td><td class="py-2 px-4 border">True</td><td class="py-2 px-4 border">No</td></tr>
+                                                <tr><td class="py-2 px-4 border">Overcast</td><td class="py-2 px-4 border">Hot</td><td class="py-2 px-4 border">High</td><td class="py-2 px-4 border">False</td><td class="py-2 px-4 border">Yes</td></tr>
+                                                <tr><td class="py-2 px-4 border">Rainy</td><td class="py-2 px-4 border">Mild</td><td class="py-2 px-4 border">High</td><td class="py-2 px-4 border">False</td><td class="py-2 px-4 border">Yes</td></tr>
+                                                <tr><td class="py-2 px-4 border">Rainy</td><td class="py-2 px-4 border">Cool</td><td class="py-2 px-4 border">Normal</td><td class="py-2 px-4 border">False</td><td class="py-2 px-4 border">Yes</td></tr>
+                                                <tr><td class="py-2 px-4 border">Rainy</td><td class="py-2 px-4 border">Cool</td><td class="py-2 px-4 border">Normal</td><td class="py-2 px-4 border">True</td><td class="py-2 px-4 border">No</td></tr>
+                                                <tr><td class="py-2 px-4 border">Overcast</td><td class="py-2 px-4 border">Cool</td><td class="py-2 px-4 border">Normal</td><td class="py-2 px-4 border">True</td><td class="py-2 px-4 border">Yes</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <p class="text-ncair-dark mb-4">The algorithm would calculate which feature (Outlook, Temperature, Humidity, or Windy) best separates the "Play" decisions.</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🧮 Step-by-Step Calculation</h4>
+                                    <p class="text-ncair-dark mb-4">Let's calculate the Information Gain for the "Outlook" feature:</p>
+                                    
+                                    <div class="hand-calculation">
+                                        <h5 class="font-bold text-ncair-primary mb-2">Step 1: Calculate Parent Entropy</h5>
+                                        <p class="text-ncair-dark mb-2">Total samples: 7 (5 Yes, 2 No)</p>
+                                        <p class="text-ncair-dark mb-2 font-mono">Entropy = - (5/7)*log₂(5/7) - (2/7)*log₂(2/7) ≈ 0.863</p>
+                                        
+                                        <h5 class="font-bold text-ncair-primary mb-2 mt-4">Step 2: Split by Outlook</h5>
+                                        <p class="text-ncair-dark mb-2">Sunny: 2 samples (2 No) → Entropy = 0</p>
+                                        <p class="text-ncair-dark mb-2">Overcast: 2 samples (2 Yes) → Entropy = 0</p>
+                                        <p class="text-ncair-dark mb-2">Rainy: 3 samples (2 Yes, 1 No) → Entropy = - (2/3)*log₂(2/3) - (1/3)*log₂(1/3) ≈ 0.918</p>
+                                        
+                                        <h5 class="font-bold text-ncair-primary mb-2 mt-4">Step 3: Calculate Weighted Average</h5>
+                                        <p class="text-ncair-dark mb-2 font-mono">Weighted Average = (2/7)*0 + (2/7)*0 + (3/7)*0.918 ≈ 0.393</p>
+                                        
+                                        <h5 class="font-bold text-ncair-primary mb-2 mt-4">Step 4: Calculate Information Gain</h5>
+                                        <p class="text-ncair-dark mb-2 font-mono">Information Gain = 0.863 - 0.393 = 0.470</p>
+                                    </div>
+                                    
+                                    <div class="exercise-box">
+                                        <h5 class="font-bold text-ncair-primary mb-2">🧠 Try It Yourself: Calculate Gini Impurity</h5>
+                                        <p class="text-ncair-dark mb-2">Using the same dataset, calculate the Gini impurity for the parent node:</p>
+                                        <p class="text-ncair-dark mb-2 font-mono">Gini = 1 - (p(Yes))² - (p(No))²</p>
+                                        <p class="text-ncair-dark mb-2">Where p(Yes) = 5/7 and p(No) = 2/7</p>
+                                        <details class="mt-2">
+                                            <summary class="cursor-pointer text-ncair-primary font-medium">Show Answer</summary>
+                                            <p class="text-ncair-dark mt-2 font-mono">Gini = 1 - (5/7)² - (2/7)² = 1 - (25/49) - (4/49) = 1 - 29/49 = 20/49 ≈ 0.408</p>
+                                        </details>
+                                    </div>
+                                    
+                                    <p class="text-ncair-dark">The algorithm would perform similar calculations for all features and select the one with the highest information gain.</p>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="prev-step bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: Python Implementation <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Python Implementation -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">3</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Python Implementation</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">💻 Building a Decision Tree Classifier</h4>
+                                    <p class="text-ncair-dark mb-4">Let's implement a decision tree classifier using Python's scikit-learn library on the famous Iris dataset.</p>
+                                    
+                                    <div class="code-header">
+                                        <span>decision_tree.py</span>
+                                        <button class="bg-ncair-secondary text-white px-3 py-1 rounded text-sm" onclick="toggleExplanation('explanation1')">
+                                            Explain Code <i class="fas fa-chevron-down ml-1"></i>
+                                        </button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code><span class="code-keyword">from</span> sklearn <span class="code-keyword">import</span> datasets
+<span class="code-keyword">from</span> sklearn.tree <span class="code-keyword">import</span> DecisionTreeClassifier
+<span class="code-keyword">from</span> sklearn.model_selection <span class="code-keyword">import</span> train_test_split
+<span class="code-keyword">from</span> sklearn.metrics <span class="code-keyword">import</span> accuracy_score
+
+<span class="code-comment"># Load the iris dataset</span>
+iris = datasets.<span class="code-function">load_iris</span>()
+X = iris.data  <span class="code-comment"># Feature matrix</span>
+y = iris.target  <span class="code-comment"># Target vector</span>
+
+<span class="code-comment"># Split the data into training and testing sets</span>
+X_train, X_test, y_train, y_test = <span class="code-function">train_test_split</span>(
+    X, y, test_size=<span class="code-number">0.2</span>, random_state=<span class="code-number">42</span>
+)
+
+<span class="code-comment"># Create decision tree classifier</span>
+clf = <span class="code-function">DecisionTreeClassifier</span>(
+    criterion=<span class="code-string">'gini'</span>,  <span class="code-comment"># Splitting criterion</span>
+    max_depth=<span class="code-number">3</span>,       <span class="code-comment"># Maximum depth of tree</span>
+    random_state=<span class="code-number">42</span>    <span class="code-comment"># Seed for reproducibility</span>
+)
+
+<span class="code-comment"># Train the classifier</span>
+clf.<span class="code-function">fit</span>(X_train, y_train)
+
+<span class="code-comment"># Make predictions on the test set</span>
+y_pred = clf.<span class="code-function">predict</span>(X_test)
+
+<span class="code-comment"># Calculate accuracy</span>
+accuracy = <span class="code-function">accuracy_score</span>(y_test, y_pred)
+<span class="code-function">print</span>(<span class="code-string">f"Accuracy: {accuracy:.2f}"</span>)</code></pre>
+                                    </div>
+                                    
+                                    <div id="explanation1" class="explanation p-4">
+                                        <h5 class="font-bold text-ncair-dark mb-2">Code Explanation:</h5>
+                                        <ul class="list-disc pl-5 text-ncair-dark">
+                                            <li><span class="font-mono">sklearn import datasets</span>: Imports utility to load sample datasets</li>
+                                            <li><span class="font-mono">DecisionTreeClassifier</span>: The main class for creating decision trees</li>
+                                            <li><span class="font-mono">train_test_split</span>: Splits data into training and testing subsets</li>
+                                            <li><span class="font-mono">accuracy_score</span>: Calculates classification accuracy</li>
+                                            <li><span class="font-mono">load_iris()</span>: Loads the Iris flower dataset (3 classes, 4 features)</li>
+                                            <li><span class="font-mono">test_size=0.2</span>: 20% of data used for testing, 80% for training</li>
+                                            <li><span class="font-mono">criterion='gini'</span>: Uses Gini impurity to measure split quality</li>
+                                            <li><span class="font-mono">max_depth=3</span>: Limits tree depth to prevent overfitting</li>
+                                            <li><span class="font-mono">fit()</span>: Trains the model on the training data</li>
+                                            <li><span class="font-mono">predict()</span>: Makes predictions on new data</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2 mt-6">🌳 Visualizing the Decision Tree</h4>
+                                    <p class="text-ncair-dark mb-4">We can visualize the trained decision tree to understand how it makes decisions:</p>
+                                    
+                                    <div class="code-header">
+                                        <span>visualize_tree.py</span>
+                                        <button class="bg-ncair-secondary text-white px-3 py-1 rounded text-sm" onclick="toggleExplanation('explanation2')">
+                                            Explain Code <i class="fas fa-chevron-down ml-1"></i>
+                                        </button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code><span class="code-keyword">import</span> matplotlib.pyplot <span class="code-keyword">as</span> plt
+<span class="code-keyword">from</span> sklearn.tree <span class="code-keyword">import</span> plot_tree
+
+<span class="code-comment"># Create a larger figure for better visibility</span>
+plt.<span class="code-function">figure</span>(figsize=(<span class="code-number">12</span>, <span class="code-number">8</span>))
+
+<span class="code-comment"># Plot the decision tree</span>
+<span class="code-function">plot_tree</span>(
+    clf,
+    feature_names=iris.feature_names,
+    class_names=iris.target_names,
+    filled=<span class="code-keyword">True</span>,      <span class="code-comment"># Color nodes by class</span>
+    rounded=<span class="code-keyword">True</span>,     <span class="code-comment"># Rounded node corners</span>
+    fontsize=<span class="code-number">10</span>        <span class="code-comment"># Font size for labels</span>
+)
+
+plt.<span class="code-function">title</span>(<span class="code-string">"Decision Tree Visualization"</span>)
+plt.<span class="code-function">show</span>()</code></pre>
+                                    </div>
+                                    
+                                    <div id="explanation2" class="explanation p-4">
+                                        <h5 class="font-bold text-ncair-dark mb-2">Code Explanation:</h5>
+                                        <ul class="list-disc pl-5 text-ncair-dark">
+                                            <li><span class="font-mono">matplotlib.pyplot</span>: Library for creating visualizations</li>
+                                            <li><span class="font-mono">plot_tree</span>: Scikit-learn function to visualize decision trees</li>
+                                            <li><span class="font-mono">feature_names</span>: Uses the actual feature names (sepal length, width, etc.)</li>
+                                            <li><span class="font-mono">class_names</span>: Uses the actual class names (setosa, versicolor, virginica)</li>
+                                            <li><span class="font-mono">filled=True</span>: Colors nodes based on the majority class</li>
+                                            <li><span class="font-mono">rounded=True</span>: Uses rounded corners for aesthetic appeal</li>
+                                            <li>Each node shows the splitting condition, gini impurity, samples count, and class distribution</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="exercise-box">
+                                        <h5 class="font-bold text-ncair-primary mb-2">🧪 Try It Yourself: Interpret the Tree</h5>
+                                        <p class="text-ncair-dark mb-2">After running the code, answer these questions:</p>
+                                        <ol class="list-decimal pl-5 text-ncair-dark mb-2">
+                                            <li>Which feature is used at the root node?</li>
+                                            <li>What is the Gini impurity of the root node?</li>
+                                            <li>How many samples are correctly classified at the first leaf node?</li>
+                                        </ol>
+                                        <details class="mt-2">
+                                            <summary class="cursor-pointer text-ncair-primary font-medium">Show Hints</summary>
+                                            <ul class="list-disc pl-5 text-ncair-dark mt-2">
+                                                <li>Look for the feature with the highest importance at the top</li>
+                                                <li>Gini impurity ranges from 0 (pure) to 0.5 (impure)</li>
+                                                <li>Check the "value" field in each leaf node to see class distribution</li>
+                                            </ul>
+                                        </details>
+                                    </div>
+                                    
+                                    <div class="bg-ncair-light p-4 rounded-lg mt-4">
+                                        <h5 class="font-bold text-ncair-primary mb-2">Expected Output:</h5>
+                                        <p class="text-ncair-dark">The code will output a visualization of the decision tree with nodes colored by class. The root node might split based on petal width, with subsequent splits on other features like petal length or sepal measurements.</p>
+                                        <p class="text-ncair-dark mt-2">Accuracy: ~0.93 (93% accurate on the test set)</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="prev-step bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: Advanced Concepts <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Advanced Concepts -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">4</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Advanced Concepts & Best Practices</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">⚠️ Overfitting and Underfitting</h4>
+                                    <p class="text-ncair-dark mb-4">Decision trees are prone to overfitting, especially when they grow too deep and complex. Underfitting occurs when the tree is too simple to capture patterns.</p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                            <h5 class="font-bold text-red-700 mb-2">Overfitting</h5>
+                                            <p class="text-sm text-red-600">Like memorizing answers without understanding concepts</p>
+                                            <p class="text-xs mt-2">Symptoms:</p>
+                                            <ul class="list-disc pl-5 text-xs text-red-600">
+                                                <li>Perfect training accuracy, poor test accuracy</li>
+                                                <li>Too many branches and complex structure</li>
+                                                <li>Doesn't generalize to new data</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                            <h5 class="font-bold text-blue-700 mb-2">Underfitting</h5>
+                                            <p class="text-sm text-blue-600">Like studying too little and missing key concepts</p>
+                                            <p class="text-xs mt-2">Symptoms:</p>
+                                            <ul class="list-disc pl-5 text-xs text-blue-600">
+                                                <li>Poor performance on both training and test data</li>
+                                                <li>Too few branches and simplistic structure</li>
+                                                <li>Misses important relationships in data</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">✂️ Preventing Overfitting: Pruning</h4>
+                                    <p class="text-ncair-dark mb-4">Pruning simplifies trees by removing unnecessary branches. Scikit-learn provides parameters to control tree growth:</p>
+                                    
+                                    <div class="code-header">
+                                        <span>pruning.py</span>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code><span class="code-comment"># Decision tree with parameters to prevent overfitting</span>
+clf = <span class="code-function">DecisionTreeClassifier</span>(
+    max_depth=<span class="code-number">5</span>,           <span class="code-comment"># Maximum depth of the tree</span>
+    min_samples_split=<span class="code-number">10</span>,   <span class="code-comment"># Minimum samples required to split a node</span>
+    min_samples_leaf=<span class="code-number">5</span>,     <span class="code-comment"># Minimum samples required at a leaf node</span>
+    max_features=<span class="code-number">3</span>,         <span class="code-comment"># Number of features to consider for best split</span>
+    ccp_alpha=<span class="code-number">0.01</span>          <span class="code-comment"># Complexity parameter for minimal cost-complexity pruning</span>
+)</code></pre>
+                                    </div>
+                                    
+                                    <div class="cheat-sheet">
+                                        <h5 class="font-bold text-ncair-primary mb-2">📋 Hyperparameter Cheat Sheet</h5>
+                                        <div class="overflow-x-auto">
+                                            <table class="min-w-full bg-white">
+                                                <thead>
+                                                    <tr class="bg-ncair-primary text-white">
+                                                        <th class="py-2 px-4 border">Parameter</th>
+                                                        <th class="py-2 px-4 border">Description</th>
+                                                        <th class="py-2 px-4 border">Typical Values</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr><td class="py-2 px-4 border">max_depth</td><td class="py-2 px-4 border">Maximum tree depth</td><td class="py-2 px-4 border">3-10</td></tr>
+                                                    <tr><td class="py-2 px-4 border">min_samples_split</td><td class="py-2 px-4 border">Min samples to split a node</td><td class="py-2 px-4 border">2-20</td></tr>
+                                                    <tr><td class="py-2 px-4 border">min_samples_leaf</td><td class="py-2 px-4 border">Min samples at a leaf node</td><td class="py-2 px-4 border">1-10</td></tr>
+                                                    <tr><td class="py-2 px-4 border">max_features</td><td class="py-2 px-4 border">Max features considered for split</td><td class="py-2 px-4 border">1 to total features</td></tr>
+                                                    <tr><td class="py-2 px-4 border">ccp_alpha</td><td class="py-2 px-4 border">Complexity parameter for pruning</td><td class="py-2 px-4 border">0.0-0.1</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2 mt-6">📊 Handling Different Data Types</h4>
+                                    <p class="text-ncair-dark mb-4">Decision trees can handle both numerical and categorical data:</p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Numerical Features</h5>
+                                            <p class="text-sm text-ncair-dark">Trees create splits based on thresholds (e.g., petal width ≤ 2.45 cm)</p>
+                                        </div>
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Categorical Features</h5>
+                                            <p class="text-sm text-ncair-dark">Trees create splits based on category membership (e.g., outlook in {sunny, overcast})</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">✅ Advantages of Decision Trees</h4>
+                                    <ul class="list-disc pl-5 text-ncair-dark mb-4">
+                                        <li>Easy to understand and interpret (white box model)</li>
+                                        <li>Can handle both numerical and categorical data</li>
+                                        <li>Require little data preprocessing (no feature scaling needed)</li>
+                                        <li>Can model complex nonlinear relationships</li>
+                                    </ul>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">❌ Limitations of Decision Trees</h4>
+                                    <ul class="list-disc pl-5 text-ncair-dark">
+                                        <li>Prone to overfitting if not properly regularized</li>
+                                        <li>Can be unstable with small variations in data</li>
+                                        <li>Often biased toward features with more levels</li>
+                                        <li>Not ideal for estimating probabilities</li>
+                                    </ul>
+                                    
+                                    <div class="exercise-box">
+                                        <h5 class="font-bold text-ncair-primary mb-2">🧠 Test Your Understanding</h5>
+                                        <p class="text-ncair-dark mb-2">Which hyperparameter would you adjust to prevent a tree from growing too deep?</p>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                            <button class="answer-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">min_samples_leaf</button>
+                                            <button class="answer-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="true">max_depth</button>
+                                            <button class="answer-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">max_features</button>
+                                            <button class="answer-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">ccp_alpha</button>
+                                        </div>
+                                        <div id="feedback" class="hidden mt-2 p-2 rounded bg-green-100 text-green-800">
+                                            <i class="fas fa-check-circle mr-1"></i> Correct! max_depth limits how deep the tree can grow.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="prev-step bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: Practical Applications <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 5: Applications -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">5</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Practical Applications & Real-World Use Cases</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">🏥 Medical Diagnosis</h4>
+                                    <p class="text-ncair-dark mb-4">Decision trees help doctors diagnose diseases based on symptoms and test results:</p>
+                                    
+                                    <!-- <div class="tree-diagram flex justify-center items-center mb-4">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHRleHQgeD0iMjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMEM0REEyIj5GZXZlcj4gMzhDPzwvdGV4dD4KICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSI1MCIgcj0iMzAiIHN0cm9rZT0iIzBDNERBMiIgZmlsbD0id2hpdGUiLz4KICA8bGluZSB4MT0iMjUwIiB5MT0iODAiIHgyPSIxNTAiIHkyPSIxMzAiIHN0cm9rZT0iIzBDNERBMiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPGxpbmUgeDE9IjI1MCIgeTE9IjgwIiB4Mj0iMzUwIiB5Mj0iMTMwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw=" alt="Medical Diagnosis Tree" class="max-h-full">
+                                    </div> -->
+
+                                    <div class="tree-diagram flex justify-center items-center mb-4">
+  <img 
+    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CgogIDwhLS0gUm9vdCAtLT4KICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSI1MCIgcj0iMzAiIHN0cm9rZT0iIzBDNERBMiIgZmlsbD0id2hpdGUiLz4KICA8dGV4dCB4PSIyNTAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMEM0REEyIj5GZXZlcj88L3RleHQ+CgogIDwhLS0gQnJhbmNoZXMgLS0+CiAgPGxpbmUgeDE9IjI1MCIgeTE9IjgwIiB4Mj0iMTUwIiB5Mj0iMTMwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxsaW5lIHgxPSIyNTAiIHkxPSI4MCIgeDI9IjM1MCIgeTI9IjEzMCIgc3Ryb2tlPSIjMEM0REEyIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBOb2RlczogTGVmdCBhbmQgUmlnaHQgLS0+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTMwIiByPSIyOCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSJ3aGl0ZSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjExIiBmaWxsPSIjMEM0REEyIj5ZRVM8L3RleHQ+CgogIDxjaXJjbGUgY3g9IjM1MCIgY3k9IjEzMCIgcj0iMjgiIHN0cm9rZT0iIzBDNERBMiIgZmlsbD0id2hpdGUiLz4KICA8dGV4dCB4PSIzNTAiIHk9IjEzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzBDNERBMiI+Tk88L3RleHQ+CgogIDwhLS0gTGVhZnQgZGlhZ25vc2lzIC0tPgogIDxsaW5lIHgxPSIxNTAiIHkxPSIxNjAiIHgyPSIxMDAiIHkyPSIyMTAiIHN0cm9rZT0iIzBDNERBMiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iMjEwIiByPSIyNSIgZmlsbD0iIzBDNERBMiIvPgogIDx0ZXh0IHg9IjEwMCIgeT0iMjE1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjExIiBmaWxsPSJ3aGl0ZSI+UG5ldW1vbmlhPC90ZXh0PgoKICA8IS0tIFJpZ2h0IGRpYWdub3NpcyAtLT4KICA8bGluZSB4MT0iMzUwIiB5MT0iMTYwIiB4Mj0iNDAwIiB5Mj0iMjEwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjIxMCIgcj0iMjUiIGZpbGw9IiNGRjZCMDAiLz4KICA8dGV4dCB4PSI0MDAiIHk9IjIxNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSIgZmlsbD0id2hpdGUiPkNvbW1vbj88L3RleHQ+Cjwvc3ZnPg==" 
+    alt="Medical Diagnosis Tree" 
+    class="max-h-full">
+</div>
+
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">💰 Credit Risk Assessment</h4>
+                                    <p class="text-ncair-dark mb-4">Banks use decision trees to evaluate loan applications based on income, credit history, employment status, and other factors.</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🛒 Customer Segmentation</h4>
+                                    <p class="text-ncair-dark mb-4">Businesses use decision trees to segment customers based on purchasing behavior, demographics, and preferences for targeted marketing.</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🏭 Industrial Applications</h4>
+                                    <p class="text-ncair-dark mb-4">Decision trees help in fault detection, quality control, and predictive maintenance in manufacturing processes.</p>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🌳 Beyond Single Trees: Random Forests</h4>
+                                    <p class="text-ncair-dark mb-4">For improved performance and robustness, multiple decision trees can be combined into ensemble methods like Random Forests:</p>
+                                    
+                                    <div class="code-header">
+                                        <span>random_forest.py</span>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code><span class="code-keyword">from</span> sklearn.ensemble <span class="code-keyword">import</span> RandomForestClassifier
+
+<span class="code-comment"># Create a random forest classifier</span>
+rf_clf = <span class="code-function">RandomForestClassifier</span>(
+    n_estimators=<span class="code-number">100</span>,    <span class="code-comment"># Number of trees in the forest</span>
+    max_depth=<span class="code-number">5</span>,         <span class="code-comment"># Maximum depth of each tree</span>
+    random_state=<span class="code-number">42</span>      <span class="code-comment"># Seed for reproducibility</span>
+)
+
+<span class="code-comment"># Train the random forest</span>
+rf_clf.<span class="code-function">fit</span>(X_train, y_train)
+
+<span class="code-comment"># Make predictions and calculate accuracy</span>
+y_pred_rf = rf_clf.<span class="code-function">predict</span>(X_test)
+accuracy_rf = <span class="code-function">accuracy_score</span>(y_test, y_pred_rf)
+<span class="code-function">print</span>(<span class="code-string">f"Random Forest Accuracy: {accuracy_rf:.2f}"</span>)</code></pre>
+                                    </div>
+                                    
+                                    <div class="cheat-sheet">
+                                        <h5 class="font-bold text-ncair-primary mb-2">📋 When to Use Decision Trees vs. Random Forests</h5>
+                                        <div class="overflow-x-auto">
+                                            <table class="min-w-full bg-white">
+                                                <thead>
+                                                    <tr class="bg-ncair-primary text-white">
+                                                        <th class="py-2 px-4 border">Scenario</th>
+                                                        <th class="py-2 px-4 border">Decision Tree</th>
+                                                        <th class="py-2 px-4 border">Random Forest</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="py-2 px-4 border">Interpretability needed</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-check text-green-500"></i> Excellent</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-times text-red-500"></i> Poor</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="py-2 px-4 border">Prediction accuracy</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-check text-green-500"></i> Good</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-check-double text-green-700"></i> Excellent</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="py-2 px-4 border">Overfitting risk</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-exclamation-triangle text-yellow-500"></i> High</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-check text-green-500"></i> Low</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="py-2 px-4 border">Training speed</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-bolt text-green-500"></i> Fast</td>
+                                                        <td class="py-2 px-4 border"><i class="fas fa-hourglass-half text-yellow-500"></i> Slower</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-box">
+                                        <h5 class="font-bold text-ncair-primary mb-2">🧠 Decision Making Exercise</h5>
+                                        <p class="text-ncair-dark mb-2">You're building a model to predict whether a bank should approve a loan. Which approach would you choose and why?</p>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div class="p-4 border border-ncair-primary/30 rounded-lg">
+                                                <h6 class="font-bold text-ncair-primary">Option A: Decision Tree</h6>
+                                                <p class="text-sm text-ncair-dark">You need to explain to customers why their loan was approved or rejected.</p>
+                                            </div>
+                                            <div class="p-4 border border-ncair-primary/30 rounded-lg">
+                                                <h6 class="font-bold text-ncair-primary">Option B: Random Forest</h6>
+                                                <p class="text-sm text-ncair-dark">Accuracy is the most important factor, and interpretability is not required.</p>
+                                            </div>
+                                        </div>
+                                        <details class="mt-4">
+                                            <summary class="cursor-pointer text-ncair-primary font-medium">Show Analysis</summary>
+                                            <p class="text-ncair-dark mt-2">For loan approvals, explaining decisions is often legally required. Option A (Decision Tree) would be better because it provides clear reasoning for decisions, even if it's slightly less accurate than a Random Forest.</p>
+                                        </details>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="prev-step bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: Interactive Exercise <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 6: Interactive Exercise -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-primary text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">6</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Interactive Exercise: Build Your Own Tree</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">🎮 Decision Tree Playground</h4>
+                                    <p class="text-ncair-dark mb-4">Adjust the parameters to see how they affect the decision tree and its performance:</p>
+                                    
+                                    <div class="interactive-demo mb-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label class="block text-ncair-dark mb-2">Max Depth:</label>
+                                                <input type="range" min="1" max="10" value="3" class="slider" id="depthSlider">
+                                                <span id="depthValue" class="text-ncair-primary font-bold">3</span>
+                                            </div>
+                                            <div>
+                                                <label class="block text-ncair-dark mb-2">Criterion:</label>
+                                                <select id="criterionSelect" class="w-full p-2 border border-gray-300 rounded">
+                                                    <option value="gini">Gini Impurity</option>
+                                                    <option value="entropy">Information Gain</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-ncair-dark mb-2">Min Samples Split:</label>
+                                                <input type="range" min="2" max="50" value="2" class="slider" id="splitSlider">
+                                                <span id="splitValue" class="text-ncair-primary font-bold">2</span>
+                                            </div>
+                                            <div>
+                                                <label class="block text-ncair-dark mb-2">Min Samples Leaf:</label>
+                                                <input type="range" min="1" max="20" value="1" class="slider" id="leafSlider">
+                                                <span id="leafValue" class="text-ncair-primary font-bold">1</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex justify-between mb-4">
+                                            <button id="trainBtn" class="bg-ncair-primary hover:bg-blue-800 text-white px-4 py-2 rounded">
+                                                Train Model
+                                            </button>
+                                            <div>
+                                                <span class="text-ncair-dark">Training Accuracy: </span>
+                                                <span id="trainAccuracy" class="font-bold">—</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-ncair-dark">Test Accuracy: </span>
+                                                <span id="testAccuracy" class="font-bold">—</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tree-diagram flex justify-center items-center">
+                                            <p id="treePlaceholder" class="text-ncair-dark">Click "Train Model" to generate the decision tree visualization</p>
+                                            <img id="treeVisualization" class="max-h-full hidden" src="" alt="Decision Tree Visualization">
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">📝 Exercise: Interpret the Tree</h4>
+                                    <p class="text-ncair-dark mb-4">After training the model, examine the tree visualization and answer these questions:</p>
+                                    
+                                    <ol class="list-decimal pl-5 text-ncair-dark mb-4">
+                                        <li>Which feature is used at the root node?</li>
+                                        <li>What is the most important feature for classification?</li>
+                                        <li>How does changing the max depth affect accuracy?</li>
+                                        <li>What happens when you increase the min samples split?</li>
+                                    </ol>
+                                    
+                                    <div class="bg-ncair-light p-4 rounded-lg">
+                                        <h5 class="font-bold text-ncair-primary mb-2">💡 Tips for Interpretation:</h5>
+                                        <ul class="list-disc pl-5 text-ncair-dark">
+                                            <li>Darker orange nodes have higher purity (more samples from one class)</li>
+                                            <li>The first split (root node) uses the most important feature</li>
+                                            <li>Very deep trees may be overfitting to the training data</li>
+                                            <li>Very shallow trees may be underfitting and missing patterns</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="prev-step bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="next-step bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        Next: Summary & Resources <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 7: Completion -->
+                    <div class="learning-path">
+                        <div class="flex items-start">
+                            <div class="bg-ncair-accent text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0"><i class="fas fa-check"></i></div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-ncair-primary mb-2">Congratulations on Completing the Decision Tree Mastery!</h3>
+                                
+                                <div class="concept-card bg-white p-6 rounded-lg shadow-md mb-4">
+                                    <h4 class="font-bold text-ncair-dark mb-2">🎓 What You've Learned</h4>
+                                    <ul class="list-disc pl-5 text-ncair-dark mb-4">
+                                        <li>The fundamentals of decision trees and how they work</li>
+                                        <li>Mathematical concepts like Gini impurity and Information Gain</li>
+                                        <li>How to implement decision trees in Python using scikit-learn</li>
+                                        <li>Techniques to prevent overfitting through pruning</li>
+                                        <li>Real-world applications of decision trees</li>
+                                        <li>How to interpret and visualize decision trees</li>
+                                    </ul>
+                                    
+                                    <div class="cheat-sheet">
+                                        <h5 class="font-bold text-ncair-primary mb-2">📋 Decision Tree Quick Reference</h5>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <h6 class="font-bold text-ncair-dark mb-2">Key Concepts</h6>
+                                                <ul class="list-disc pl-5 text-sm text-ncair-dark">
+                                                    <li>Root Node: Starting point of the tree</li>
+                                                    <li>Decision Nodes: Where splits happen</li>
+                                                    <li>Leaf Nodes: Final predictions</li>
+                                                    <li>Gini Impurity: Measure of node purity</li>
+                                                    <li>Information Gain: Reduction in entropy</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h6 class="font-bold text-ncair-dark mb-2">When to Use</h6>
+                                                <ul class="list-disc pl-5 text-sm text-ncair-dark">
+                                                    <li>Need for interpretability</li>
+                                                    <li>Mixed data types (numeric & categorical)</li>
+                                                    <li>Non-linear relationships</li>
+                                                    <li>Feature importance analysis</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2 mt-6">📚 Further Learning Resources</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Books</h5>
+                                            <ul class="list-disc pl-5 text-sm text-ncair-dark">
+                                                <li>Introduction to Statistical Learning</li>
+                                                <li>Pattern Recognition and Machine Learning</li>
+                                                <li>Hands-On Machine Learning with Scikit-Learn</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-ncair-light p-4 rounded-lg">
+                                            <h5 class="font-bold text-ncair-primary mb-2">Online Courses</h5>
+                                            <ul class="list-disc pl-5 text-sm text-ncair-dark">
+                                                <li>Machine Learning by Andrew Ng (Coursera)</li>
+                                                <li>Scikit-Learn Official Documentation</li>
+                                                <li>Kaggle Micro-Courses on Machine Learning</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="font-bold text-ncair-dark mb-2">🚀 Next Steps in Your ML Journey</h4>
+                                    <ol class="list-decimal pl-5 text-ncair-dark">
+                                        <li class="mb-2">Practice with real datasets on platforms like Kaggle</li>
+                                        <li class="mb-2">Explore ensemble methods like Random Forests and Gradient Boosting</li>
+                                        <li class="mb-2">Learn about other ML algorithms (SVMs, Neural Networks, etc.)</li>
+                                        <li class="mb-2">Study model evaluation metrics beyond accuracy</li>
+                                        <li>Participate in ML competitions to test your skills</li>
+                                    </ol>
+                                    
+                                    <div class="exercise-box mt-6">
+                                        <h5 class="font-bold text-ncair-primary mb-2">✅ Knowledge Check</h5>
+                                        <p class="text-ncair-dark mb-4">Test your understanding with these final questions:</p>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <p class="text-ncair-dark mb-2">1. What does a Gini impurity of 0 indicate?</p>
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">Complete randomness</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="true">Perfect purity</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">50/50 split</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">Maximum uncertainty</button>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p class="text-ncair-dark mb-2">2. Which parameter helps prevent overfitting by limiting tree depth?</p>
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">min_samples_leaf</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="true">max_depth</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">n_estimators</button>
+                                                    <button class="quiz-btn bg-ncair-light hover:bg-ncair-primary/20 p-2 rounded border border-ncair-primary/30" data-correct="false">random_state</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="quiz-feedback" class="hidden mt-4 p-3 rounded bg-green-100 text-green-800">
+                                            <i class="fas fa-check-circle mr-1"></i> <span id="feedback-text"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button class="restart-journey bg-ncair-primary hover:bg-blue-800 text-white px-6 py-2 rounded-full font-medium transition mr-4">
+                                        <i class="fas fa-redo mr-2"></i> Review Journey
+                                    </button>
+                                    <button class="bg-ncair-secondary hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+                                        <i class="fas fa-certificate mr-2"></i> Download Certificate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-ncair-dark text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">NITDA/NCAIR ML Mastery Portal</h3>
+                    <p class="text-gray-400">A revolutionary educational platform for building Nigeria's AI capabilities through comprehensive machine learning education.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Courses</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Learning Path</a></li>
+                        <li><a href="./Quize.html" class="text-gray-400 hover:text-white transition">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>  Abuja, Nigeria</p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-envelope mr-2"></i> nuhumuammaddatti@gmail.com</p>
+                    <p class="text-gray-400"><i class="fas fa-phone mr-2"></i> +234 808 844 0095</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 NITDA/NCAIR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('startLearning');
+            const nextButtons = document.querySelectorAll('.next-step');
+            const prevButtons = document.querySelectorAll('.prev-step');
+            const restartButton = document.querySelector('.restart-journey');
+            const learningPaths = document.querySelectorAll('.learning-path');
+            const progressBar = document.querySelector('.progress-bar');
+            
+            // Interactive sliders
+            const depthSlider = document.getElementById('depthSlider');
+            const depthValue = document.getElementById('depthValue');
+            const splitSlider = document.getElementById('splitSlider');
+            const splitValue = document.getElementById('splitValue');
+            const leafSlider = document.getElementById('leafSlider');
+            const leafValue = document.getElementById('leafValue');
+            const trainBtn = document.getElementById('trainBtn');
+            const trainAccuracy = document.getElementById('trainAccuracy');
+            const testAccuracy = document.getElementById('testAccuracy');
+            const treePlaceholder = document.getElementById('treePlaceholder');
+            const treeVisualization = document.getElementById('treeVisualization');
+            
+            // Quiz buttons
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            const quizButtons = document.querySelectorAll('.quiz-btn');
+            const feedback = document.getElementById('feedback');
+            const quizFeedback = document.getElementById('quiz-feedback');
+            const feedbackText = document.getElementById('feedback-text');
+            
+            // Update slider values
+            depthSlider.addEventListener('input', function() {
+                depthValue.textContent = this.value;
+            });
+            
+            splitSlider.addEventListener('input', function() {
+                splitValue.textContent = this.value;
+            });
+            
+            leafSlider.addEventListener('input', function() {
+                leafValue.textContent = this.value;
+            });
+            
+            // Answer buttons
+            answerButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    
+                    if (isCorrect) {
+                        feedback.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Quiz buttons
+            quizButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    
+                    if (isCorrect) {
+                        quizFeedback.classList.remove('hidden');
+                        feedbackText.textContent = 'Correct! Well done.';
+                        quizFeedback.className = 'mt-4 p-3 rounded bg-green-100 text-green-800';
+                    } else {
+                        quizFeedback.classList.remove('hidden');
+                        feedbackText.textContent = 'Not quite. Try again!';
+                        quizFeedback.className = 'mt-4 p-3 rounded bg-red-100 text-red-800';
+                    }
+                });
+            });
+            
+            // Train model button
+            trainBtn.addEventListener('click', function() {
+                // Simulate training process
+                trainBtn.textContent = "Training...";
+                trainBtn.disabled = true;
+                
+                setTimeout(function() {
+                    const depth = depthSlider.value;
+                    const split = splitSlider.value;
+                    const leaf = leafSlider.value;
+                    
+                    // Simulated accuracy based on parameters
+                    const baseAccuracy = 0.9;
+                    const depthEffect = 0.03 * (5 - Math.abs(5 - depth));
+                    const splitEffect = 0.01 * (10 - Math.min(split, 10));
+                    const leafEffect = 0.005 * (5 - Math.min(leaf, 5));
+                    
+                    const finalTrainAccuracy = baseAccuracy + depthEffect + splitEffect + leafEffect;
+                    const finalTestAccuracy = finalTrainAccuracy - 0.05 - (0.01 * (depth - 3));
+                    
+                    trainAccuracy.textContent = (finalTrainAccuracy * 100).toFixed(1) + "%";
+                    testAccuracy.textContent = (finalTestAccuracy * 100).toFixed(1) + "%";
+                    
+                    // Show tree visualization
+                    treePlaceholder.classList.add('hidden');
+                    treeVisualization.classList.remove('hidden');
+                    treeVisualization.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHRleHQgeD0iMjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMEM0REEyIj5QZXRhbCBXaWR0aCZuYnNwOyZsdDs9IDIuNDUgY20/PC90ZXh0PgogIDxjaXJjbGUgY3g9IjI1MCIgY3k9IjUwIiByPSIzMCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSJ3aGl0ZSIvPgogIDxsaW5lIHgxPSIyNTAiIHkxPSI4MCIgeDI9IjE1MCIgeTI9IjEzMCIgc3Ryb2tlPSIjMEM0REEyIiBzdHJva2Utd2lkdGgPSIyIi8+CiAgPGxpbmUgeDE9IjI1MCIgeTE9IjgwIiB4Mj0iMzUwIiB5Mj0iMTMwIiBzdHJva2U9IiMwQzREQTIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwQzREQTIiPlRydWU8L3RleHQ+CiAgPHRleHQgeD0iMzUwIiB5PSIxODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzBDNERBMiI+RmFsc2U8L3RleHQ+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTMwIiByPSIzMCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSIjMEM0REEyIi8+CiAgPGNpcmNsZSBjeD0iMzUwIiBjeT0iMTMwIiByPSIzMCIgc3Ryb2tlPSIjMEM0REEyIiBmaWxsPSJ3aGl0ZSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5zZXRvc2E8L3RleHQ+CiAgPHRleHQgeD0iMzUwIiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgdGV4dC1hbmNob3I=";
+                    
+                    trainBtn.textContent = "Train Model";
+                    trainBtn.disabled = false;
+                }, 1500);
+            });
+            
+            // Toggle code explanations
+            window.toggleExplanation = function(id) {
+                const explanation = document.getElementById(id);
+                explanation.classList.toggle('open');
+                
+                const button = explanation.previousElementSibling.querySelector('button');
+                const icon = button.querySelector('i');
+                
+                if (explanation.classList.contains('open')) {
+                    button.innerHTML = 'Collapse Explanation <i class="fas fa-chevron-up ml-1"></i>';
+                } else {
+                    button.innerHTML = 'Explain Code <i class="fas fa-chevron-down ml-1"></i>';
+                }
+            };
+            
+            // Start learning journey
+            startButton.addEventListener('click', function() {
+                document.querySelector('.learning-path.active').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            });
+            
+            // Next step buttons
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentActive = document.querySelector('.learning-path.active');
+                    const nextSibling = currentActive.nextElementSibling;
+                    
+                    if (nextSibling && nextSibling.classList.contains('learning-path')) {
+                        currentActive.classList.remove('active');
+                        nextSibling.classList.add('active');
+                        
+                        // Update progress bar
+                        const totalSteps = learningPaths.length;
+                        const completedSteps = Array.from(learningPaths).indexOf(nextSibling);
+                        progressBar.style.width = `${(completedSteps / (totalSteps - 1)) * 100}%`;
+                        
+                        nextSibling.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                });
+            });
+            
+            // Previous step buttons
+            prevButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentActive = document.querySelector('.learning-path.active');
+                    const prevSibling = currentActive.previousElementSibling;
+                    
+                    if (prevSibling && prevSibling.classList.contains('learning-path')) {
+                        currentActive.classList.remove('active');
+                        prevSibling.classList.add('active');
+                        
+                        // Update progress bar
+                        const totalSteps = learningPaths.length;
+                        const completedSteps = Array.from(learningPaths).indexOf(prevSibling);
+                        progressBar.style.width = `${(completedSteps / (totalSteps - 1)) * 100}%`;
+                        
+                        prevSibling.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                });
+            });
+            
+            // Restart journey
+            if (restartButton) {
+                restartButton.addEventListener('click', function() {
+                    learningPaths.forEach(path => path.classList.remove('active'));
+                    learningPaths[0].classList.add('active');
+                    progressBar.style.width = '0%';
+                    
+                    learningPaths[0].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
